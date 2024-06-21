@@ -1,4 +1,49 @@
-:root{
+:root {
     --blogger-dark-grey: #ccd0d4;
     --blogger-light-grey: #f6f7f7;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.body {
+    margin: 0;
+    padding: 0;
+}
+
+.row {
+    width: 100%;
+    margin: 0px;
+}
+
+.col {
+    padding: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.bed_menubar {
+    width: 100%;
+    height: 3vh;
+    background-color: #000;
+}
+
+.bed_menubar_item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

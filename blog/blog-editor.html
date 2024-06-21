@@ -23,17 +23,25 @@
 </head>
 
 <body>
-    <section class="bed_menubar">
-        <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
-                <div class="bed_menubar_item">
-
-                </div>
+    <section class="row bed_menubar">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 bed_menubar_col1">
+            <div class="bed_menubar_item">
+                <img src="assets/favicon.png" alt="">
             </div>
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
-
+            <div class="bed_menubar_item">
+                <h6>SIMPLI</h6>
             </div>
         </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 bed_menubar_col2">
+            <div class="bed_menubar_item">
+                <h6 id="displayUserName"></h6>
+                <h6>&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-user"></i></h6>
+            </div>
+        </div>
+    </section>
+
+    <section class="bed_editor_area">
+        <input type="text" placeholder="Add Title" id="postTitle">
     </section>
 
 
@@ -48,6 +56,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
+
+    <script src="blog.js"></script>
 </body>
 
 </html>

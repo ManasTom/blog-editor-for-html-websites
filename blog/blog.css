@@ -14,8 +14,8 @@ body {
 }
 
 .row {
-    width: 100%;
-    margin: 0px;
+    width: 100% !important;
+    margin: 0px !important;
 }
 
 .col {
@@ -38,12 +38,76 @@ body {
 
 .bed_menubar {
     width: 100%;
-    height: 3vh;
+    height: 4vh;
+    padding-bottom: 0.1%;
     background-color: #000;
+}
+
+.bed_menubar_col1 {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.bed_menubar_col2 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .bed_menubar_item {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: max-content;
+    height: 4vh;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-right: 10px;
+}
+
+.bed_menubar_item img {
+    height: 100%;
+}
+
+.bed_menubar_item h6 {
+    color: #ffff;
+    margin: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.bed_editor_area{
+    width: 100%;
+    height: max-content;
+}
+
+
+
+
+
+
+
+
+
+
+
+* {
+    /* border: 1px solid red; */
 }

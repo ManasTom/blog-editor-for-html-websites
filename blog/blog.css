@@ -96,7 +96,24 @@ body {
 .bed_editor_area{
     width: 100%;
     height: max-content;
+    background-color: #cfcfcf40;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 1%;
 }
+.bed_editor_area input{
+    width: 100%;
+    padding: 0.7%;
+    font-weight: 600;
+    margin-bottom: 1%;
+    margin-top: 1%;
+}
+
+.ql-editor{
+    background-color: #ffff;
+    min-height: 50vh !important;
+}
+
 
 
 

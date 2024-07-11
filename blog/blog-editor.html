@@ -41,19 +41,60 @@
             </div>
         </div>
     </section>
+        <div class="row">
+            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                <section class="bed_editor_area">
+                    <input type="text" placeholder="Add Title" id="postTitle">
+                    <!-- Create the editor container -->
+                    <div class="bed_content_editor" id="bed_content_editor">
+                        <br> <br>
+                    </div>
+                    <input type="text" placeholder="Add the Focus Keyphrase" id="focusKeyphrase">
+                    <input type="text" placeholder="Add SEO Title" id="seoTitle">
+                    <input type="text" placeholder="Add Slug" id="seoTitle">
+                    <input type="text" placeholder="Add Meta Description" id="MetaDescription">
 
-    <section class="bed_editor_area">
-        <input type="text" placeholder="Add Title" id="postTitle">
-        <!-- Create the editor container -->
-        <div class="bed_content_editor" id="bed_content_editor">
-            <br> <br>
+                </section>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+                <div class="featured-image-card">
+                    <div class="image-preview" id="image-preview">
+                        <p>Add Feautred Image</p>
+                        <img id="featured-image" src="default-image.png" alt="Featured image">
+                    </div>
+                    <input type="file" id="image-input" accept="image/*" style="display: none;">
+                    <button id="upload-button">Click here to add or update</button>
+                    <button id="remove-button">Remove featured image</button>
+                </div>
+
+                <div class="tags-card">
+                    <p>Tags</p>
+                    <div class="input-group">
+                        <input type="text" id="tag-input" placeholder="Separate tags with commas">
+                        <button id="add-tag-button">Add</button>
+                    </div>
+                    <div class="tags-container" id="tags-container"></div>
+                </div>
+
+                <div class="actions_card">
+                    <p>Publish</p>
+                    <h4>Visibility:</h4>
+                    <label>
+                        <input type="radio" name="option" value="public">
+                        Public
+                    </label>
+                    <label>
+                        <input type="radio" name="option" value="private">
+                        Private
+                    </label>
+                    <br>
+                    <br>
+                    <button id="publish">publish</button>
+                </div>
+            </div>
         </div>
-        <input type="text" placeholder="Add the Focus Keyphrase" id="focusKeyphrase">
-        <input type="text" placeholder="Add SEO Title" id="seoTitle">
-        <input type="text" placeholder="Add Slug" id="seoTitle">
-        <input type="text" placeholder="Add Meta Description" id="MetaDescription">
 
-    </section>
+
 
 
 
@@ -69,37 +110,6 @@
         crossorigin="anonymous"></script>
     <!-- Include the Quill library -->
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
-
-    <!-- Initialize Quill editor -->
-    <script>
-        const toolbarOptions = [
-            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-            ['blockquote', 'code-block'],
-            ['link', 'image', 'video', 'formula'],
-
-
-            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-            [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-            [{ 'direction': 'rtl' }],                         // text direction
-
-            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-            [{ 'font': [] }],
-            [{ 'align': [] }],
-
-            ['clean']                                         // remove formatting button
-        ];
-        const quill = new Quill('#bed_content_editor', {
-            modules: {
-                toolbar: toolbarOptions
-            },
-            theme: 'snow',
-        });
-    </script>
 
     <script src="blog.js"></script>
 </body>

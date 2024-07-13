@@ -41,6 +41,8 @@ body {
     height: 4vh;
     padding-bottom: 0.1%;
     background-color: #000;
+    position: fixed;
+    z-index: 100;
 }
 
 .bed_menubar_col1 {
@@ -91,7 +93,9 @@ body {
 
 
 
-
+.bed_body{
+    padding-top: 4vh !important;
+}
 
 .bed_editor_area {
     border-right: 2px solid #000;

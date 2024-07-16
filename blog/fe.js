@@ -7,7 +7,7 @@ const firebaseConfig = {
     storageBucket: "blog-decea.appspot.com",
     messagingSenderId: "591423046157",
     appId: "1:591423046157:web:a4218ab1bbbacf0ac88b44"
-};
+}
 
 firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
@@ -22,8 +22,22 @@ async function uploadFile(file) {
 
 // Function to save HTML file to the server (simulated)
 async function saveHTMLFile(filename, content) {
-    // Simulate saving the file to the root directory
-    console.log(`Saving HTML file: ${filename}`);
-    console.log(content);
-    // You can replace this with actual server-side code to save the file
+    try {
+        const response = await fetch('http://localhost:3000/save-html', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ filename, content })
+        });
+
+        if (response.ok) {
+            console.log('File saved successfully');
+        } else {
+            console.error('Error saving file:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error saving file:', error);
+    }
 }
+

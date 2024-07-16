@@ -56,29 +56,31 @@ async function processBlogData() {
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
         rel="stylesheet">
     </head>
-    <body>
-        <header style="width: 100%; height: max-content; background-color: rgb(255, 255, 223);">
-            <div style="height: 10vh; width: 98%; margin-left: 1%; margin-right: 1%;">
+    <body style="margin: 0; padding: 0;">
+    <header style="width: 100%; height: max-content; background-color: rgb(255, 255, 223);">
+        <div style="height: 10vh; width: 98%; margin-left: 1%; margin-right: 1%;">
 
+        </div>
+    </header>
+    <section
+        style="width: 100%; height: max-content; display: flex; align-items: center; justify-content: center; background-color: rgb(230, 230, 230);">
+        <div style="width: 70%; height: max-content; padding: 1%; background-color: rgb(255, 255, 255);">
+            <div
+                style="width: 100%; height: 20vh; position: relative;">
+                <img style="width: 100%; height: auto;" src="${imageURL}" alt="Feautred image">
+                <h1
+                    style="background-color: rgb(255, 255, 255); max-width: 98%; margin-left: 1%; padding: 2%; font-family: Open Sans, sans-serif; position: absolute; bottom: 0;">
+                    ${title}
+                </h1>
             </div>
-        </header>
-        <section
-            style="width: 100%; height: max-content; display: flex; align-items: center; justify-content: center; background-color: rgb(230, 230, 230);">
-            <div style="width: 70%; height: max-content; padding: 1%; background-color: rgb(255, 255, 255);">
-                <div
-                    style="width: 100%; height: 20vh; position: relative; background-image: ${imageURL}; background-size: cover;  background-position: center;  background-repeat: no-repeat;  overflow: hidden;">
-                    <h1
-                        style="width: 98%; margin-left: 1%; font-family: Open Sans, sans-serif; position: absolute; bottom: 0;">
-                            ${title}
-                    </h1>
-                </div>
-                <div style="width: 100%; height: max-content;">
-                    ${processedContent}
-                </div>
+            <div style="width: 100%; height: max-content;">
+                ${processedContent}
             </div>
-        </section>
-        
-    </body>
+        </div>
+    </section>
+
+
+</body>
     </html>
     `;
 

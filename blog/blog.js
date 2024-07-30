@@ -2,24 +2,6 @@ let username = 'user 01';
 
 document.getElementById("displayUserName").innerText = username;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ************************************************************************************
 // script for quill editor
 // ************************************************************************************
@@ -28,7 +10,6 @@ const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
     ['blockquote', 'code-block'],
     ['link', 'image', 'video', 'formula'],
-
 
     [{ 'header': 1 }, { 'header': 2 }],               // custom button values
     [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
@@ -51,11 +32,6 @@ const quill = new Quill('#bed_content_editor', {
     },
     theme: 'snow',
 });
-
-
-
-
-
 
 // ************************************************************************************
 // script to add hash tags
@@ -87,12 +63,8 @@ document.getElementById('add-tag-button').addEventListener('click', () => {
     tagInput.value = '';
 });
 
-
-
-
-
 // ************************************************************************************
-// script to add feautred image
+// script to add featured image
 // ************************************************************************************
 
 document.getElementById('upload-button').addEventListener('click', () => {
@@ -114,10 +86,3 @@ document.getElementById('remove-button').addEventListener('click', () => {
     document.getElementById('featured-image').src = 'default-image.png'; // Set to default or placeholder image
     document.getElementById('image-input').value = ''; // Clear the input value
 });
-
-
-
-
-
-
-

@@ -18,7 +18,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100..900&family=Jomhuria&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100..900&family=Jomhuria&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
         rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
@@ -42,61 +42,69 @@
         </div>
     </section>
     <div class="row bed_body">
-        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
-            <section class="bed_editor_area">
-                <input type="text" placeholder="Add Title" id="postTitle">
-                <!-- Create the editor container -->
-                <div class="bed_content_editor" id="bed_content_editor">
-                    <br> <br>
-                </div>
-                <input type="text" placeholder="Add the Focus Keyphrase" id="focusKeyphrase">
-                <input type="text" placeholder="Add SEO Title" id="seoTitle">
-                <input type="text" placeholder="Add Slug" id="slug">
-                <input type="text" placeholder="Add Meta Description" id="MetaDescription">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <form id="blogForm" method="post" enctype="multipart/form-data" action="publish.php">
+                <div class="row">
+                    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
+                        <section class="bed_editor_area">
+                            <input type="text" placeholder="Add Title" id="postTitle" name="title">
+                            <!-- Create the editor container -->
+                            <div class="bed_content_editor" id="bed_content_editor">
+                                <br> <br>
+                            </div>
+                            <input type="hidden" id="content" name="content">
+                            <input type="text" placeholder="Add the Focus Keyphrase" id="focusKeyphrase"
+                                name="focusKeyphrase">
+                            <input type="text" placeholder="Add SEO Title" id="seoTitle" name="seoTitle">
+                            <input type="text" placeholder="Add Slug" id="slug" name="slug">
+                            <input type="text" placeholder="Add Meta Description" id="MetaDescription"
+                                name="metaDescription">
+                            <input type="hidden" id="tags" name="tags">
+                        </section>
+                    </div>
 
-            </section>
-        </div>
-        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
-            <div class="featured-image-card">
-                <div class="image-preview" id="image-preview">
-                    <p>Add Feautred Image</p>
-                    <img id="featured-image" src="default-image.png" alt="Featured image">
-                </div>
-                <input type="file" id="image-input" accept="image/*" style="display: none;">
-                <button id="upload-button">Click here to add or update</button>
-                <button id="remove-button">Remove featured image</button>
-            </div>
 
-            <div class="tags-card">
-                <p>Tags</p>
-                <div class="input-group">
-                    <input type="text" id="tag-input" placeholder="Separate tags with commas">
-                    <button id="add-tag-button">Add</button>
-                </div>
-                <div class="tags-container" id="tags-container"></div>
-            </div>
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+                        <div class="featured-image-card">
+                            <div class="image-preview" id="image-preview">
+                                <p>Add Featured Image</p>
+                                <img id="featured-image" src="default-image.png" alt="Featured image">
+                            </div>
+                            <input type="file" id="image-input" accept="image/*" name="featuredImage"
+                                style="display: none;">
+                            <button type="button" id="upload-button">Click here to add or update</button>
+                            <button type="button" id="remove-button">Remove featured image</button>
+                        </div>
 
-            <div class="actions_card">
-                <p>Publish</p>
-                <h4>Visibility:</h4>
-                <label>
-                    <input type="radio" name="option" value="public">
-                    Public
-                </label>
-                <label>
-                    <input type="radio" name="option" value="private">
-                    Private
-                </label>
-                <br>
-                <br>
-                <button id="publish">publish</button>
-            </div>
+                        <div class="tags-card">
+                            <p>Tags</p>
+                            <div class="input-group">
+                                <input type="text" id="tag-input" placeholder="Separate tags with commas">
+                                <button type="button" id="add-tag-button">Add</button>
+                            </div>
+                            <div class="tags-container" id="tags-container"></div>
+                        </div>
+
+                        <div class="actions_card">
+                            <p>Publish</p>
+                            <h4>Visibility:</h4>
+                            <label>
+                                <input type="radio" name="visibility" value="public">
+                                Public
+                            </label>
+                            <label>
+                                <input type="radio" name="visibility" value="private">
+                                Private
+                            </label>
+                            <br><br>
+                            <button type="button" id="publish">publish</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
         </div>
     </div>
-
-
-
-
 
     <!-- bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -110,18 +118,23 @@
         crossorigin="anonymous"></script>
     <!-- Include the Quill library -->
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
-
-     <!-- Import the Firebase core (always required) -->
-     <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
-     <!-- Import only the Firebase database module -->
-     <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
-     <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-database.js"></script>
-     <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-storage.js"></script>
-     <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase.js"></script>
-
     <script src="blog.js"></script>
-    <script src="fe.js"></script>
-    <script src="jre.js"></script>
+    <script>
+        document.getElementById('publish').addEventListener('click', function () {
+            // Get the content from the editor
+            document.getElementById('content').value = quill.root.innerHTML;
+
+            // Collect tags
+            const tagsContainer = document.getElementById('tags-container');
+            const tags = Array.from(tagsContainer.children).map(tagElement => tagElement.firstChild.textContent);
+            document.getElementById('tags').value = tags.join(',');
+
+            // Submit the form
+            document.getElementById('blogForm').submit();
+        });
+    </script>
+
+
 </body>
 
 </html>

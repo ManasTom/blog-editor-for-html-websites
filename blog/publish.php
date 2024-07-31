@@ -14,13 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Get form data
-    $title = $_POST['title'];
+    $title = htmlspecialchars($_POST['title']);
     $content = $_POST['content'];
-    $focusKeyphrase = $_POST['focusKeyphrase'];
-    $seoTitle = $_POST['seoTitle'];
-    $slug = $_POST['slug'];
-    $metaDescription = $_POST['metaDescription'];
-    $tags = $_POST['tags'];
+    $focusKeyphrase = htmlspecialchars($_POST['focusKeyphrase']);
+    $seoTitle = htmlspecialchars($_POST['seoTitle']);
+    $slug = htmlspecialchars($_POST['slug']);
+    $metaDescription = htmlspecialchars($_POST['metaDescription']);
+    $tags = htmlspecialchars($_POST['tags']);
     $visibility = $_POST['visibility'];
 
     // Handle image upload
@@ -35,6 +35,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
+
+    // user defined global variables
+    $rootPath = 'https://yourdomainname.com/blog/';
+    $language = 'en_US';
+    $openGraphType = 'article';
+    $publisherUrl = 'https://any-social-media-profile-link';
+    $publisherName = 'your-company-name';
+    $publisherTwitterId = '@yourTwitterId';
+    $publisherLogo = 'globals/your-logo.png';
+    $favioconLink = 'globals/favicon.png';
+
+
+    //processed variables
+    $canonicalUrl = $rootPath.$slug;
+    $CurrentDateTime = date('c');
+    $feautredImageLink = $rootPath.$featuredImage;
+    $logoImageLink = $rootPath.$publisherLogo;
+    $formattedPublishDate = date('F j, Y');
+
     // Create the blog post content with updated styling
     $blogPostContent = "
     <!DOCTYPE html>
@@ -42,9 +61,57 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <head>
         <meta charset='UTF-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <meta name='robots' content='index, follow' />
         <title>$seoTitle</title>
-        <meta name='description' content='$metaDescription'>
-        <link rel='stylesheet' href='blog.css'>
+        <link rel='shortcut icon' type='image/jpg' href='$favioconLink' />
+        <meta name='description' content='$metaDescription' />
+        <link rel='canonical' href='$canonicalUrl' />
+        <meta property='og:locale' content='$language' />
+	    <meta property='og:type' content='$openGraphType' />
+        <meta property='og:title' content='$seoTitle' />
+        <meta property='og:description' content='$metaDescription' />
+        <meta property='og:url' content='$canonicalUrl' />
+        <meta property='article:publisher' content='$publisherUrl' />
+        <meta property='article:published_time' content='$CurrentDateTime' />
+        <meta name='author' content='$publisherName' />
+        <meta property='og:image:type' content='image/jpeg' />
+        <meta name='twitter:card' content='summary_large_image' />
+	    <meta name='twitter:creator' content='$publisherTwitterId' />
+	    <meta name='twitter:site' content='$publisherTwitterId' />
+	    <meta name='twitter:label1' content='Written by' />
+	    <meta name='twitter:data1' content='$publisherName' />
+	    <meta name='twitter:label2' content='Est. reading time' />
+	    <meta name='twitter:data2' content='4 minutes' />
+        <script type='application/ld+json'>
+            {
+                '@context': 'https://schema.org',
+                '@type': '$openGraphType',
+                'headline': '$seoTitle',
+                'description': '$metaDescription',
+                'image': '$feautredImageLink',
+                'author': {
+                    '@type': 'Person',
+                    'name': '$publisherName'
+                },
+                'publisher': {
+                    '@type': 'Organization',
+                    'name': '$publisherName',
+                    'logo': {
+                    '@type': 'ImageObject',
+                    'url': '$logoImageLink'
+                    }
+                },
+                'datePublished': '$CurrentDateTime',
+                'mainEntityOfPage': {
+                    '@type': 'WebPage',
+                    '@id': '$canonicalUrl'
+                }
+            }
+        </script>
+
+
+
+        <link rel='stylesheet' href='blog.css'/>
         
     <!-- bootstrap -->
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet'
@@ -188,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class='container'>
             <img src='$featuredImage' class='featured-image' alt='Featured Image'>
             <h1 class='post-title'>$title</h1>
-            <p class='post-meta'>By Your Name | July 14, 2024</p>
+            <p class='post-meta'>By $publisherName | $formattedPublishDate</p>
             <div class='post-content'>$content</div>
             <p class='post-tags'>Tags: $tags</p>
         </div>

@@ -1,0 +1,283 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.featured-image {
+    width: 100%;
+    height: auto;
+}
+
+.post-title {
+    font-size: 2em;
+    margin: 20px 0;
+}
+
+.post-meta {
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.post-content {
+    font-size: 1.1em;
+}
+
+.post-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+.post-tags {
+    margin-top: 20px;
+    font-style: italic;
+    color: #555;
+}
+
+.header {
+    width: 100%;
+    height: max-content;
+    box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header_col1 img {
+    width: 100%;
+    height: auto;
+    padding: 5%;
+}
+
+.header_col2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.header_col3 {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.header_col3 a {
+    color: #000000;
+    font-size: 300%;
+}
+
+.mobile_menu {
+    width: 100%;
+    height: max-content;
+    display: none;
+}
+
+.mobile_menu a {
+    text-decoration: none;
+    color: #000000;
+    font-weight: 600;
+}
+
+.mobile_menu li {
+    list-style-type: none;
+}
+
+@media (max-width: 768px) {
+    .header_col2 {
+        display: none;
+    }
+}
+
+@media (min-width: 769px) {
+    .header_col3 {
+        display: none;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.footer {
+    width: 100%;
+    height: max-content;
+    /* padding-top: 3%;
+    padding-left: 3%;
+    padding-right: 3%; */
+    margin-top: 3%;
+    /* background-color: #ebebeb; */
+
+}
+
+.footer_sec {
+    padding: 2%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+.footer_tagline h5 {
+    padding-top: 5%;
+    font-size: 110%;
+}
+
+.footer_col2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer_col3 {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+
+.footer_col3 p {
+    max-width: 70%;
+}
+
+.footer_logo img {
+    width: 60%;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .footer_col2 {
+        align-items: start;
+        padding-top: 2%;
+        padding-bottom: 4%;
+    }
+
+    .footer_logo img {
+        width: 50%;
+    }
+}
+
+.footer_section {
+    width: 100%;
+    height: max-content;
+    padding: 2%;
+}
+
+.footer_section_col1 {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer_section_col1 img {
+    width: 10%;
+}
+
+.footer_section_col1 p {
+    font-size: 100%;
+    margin: 0%;
+}
+
+.footer_section_col1 a {
+    font-size: 100%;
+    text-decoration: none;
+}
+
+.footer_section_col2 {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-left: 7% !important;
+    padding-right: 7% !important;
+}
+
+.footer_section_col2 i {
+    color: #000000;
+    font-size: 130%;
+}
+
+@media (max-width: 1042px) {
+    .footer_section_col1 p {
+        font-size: 90%;
+    }
+
+    .footer_section_col1 a {
+        font-size: 90%;
+    }
+}
+
+@media (max-width: 1042px) {
+    .footer_section_col1 p {
+        font-size: 95%;
+    }
+
+    .footer_section_col1 a {
+        font-size: 95%;
+    }
+
+    .footer_section_col2 {
+        padding-left: 20%;
+        padding-right: 20%;
+        padding-top: 3%;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer_section_col1 {
+        flex-direction: column;
+    }
+}
+
+
+
+
+
+
+
+
+
+.hashtagposts {
+    width: 90% !important;
+    margin-left: 5% !important;
+    margin-right: 5% !important;
+    margin-top: 5% !important;
+    margin-bottom: 5% !important;
+    box-shadow: 0 0 10px rgb(0 0 0 / 71%);
+    border-radius: 0.3rem;
+}
+
+.hashtagpostcontainer {
+    width: 100%;
+    height: 100%;
+    padding: 2%;
+}
+
+.hashtagpostcard {
+    height: 100%;
+    box-shadow: 0 0 10px rgb(0 0 0 / 71%);
+    border-radius: 0.3rem;
+    padding: 2%;
+}
+
+.hashtagpostcard img{
+    width: 100%;
+}
+
+* {
+    /* border: 1px solid red; */
+}

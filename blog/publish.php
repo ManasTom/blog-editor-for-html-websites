@@ -23,6 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tags = $_POST['tags'];
     $visibility = $_POST['visibility'];
 
+    // Extract the first line from the content
+    $firstLine = strtok($content, "\n");
+
     // Handle image upload
     $targetDir = "uploads/";
     $featuredImage = "";
@@ -103,6 +106,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (file_put_contents($tagsFilePath, json_encode($tagsData, JSON_PRETTY_PRINT)) === false) {
         die("Error: Unable to update tags.json.");
     }
+
+    // Extract the first line from the content, remove any embedded images, and limit to 100 characters
+    $firstLine = strtok($content, "\n"); // Get the first line of the content
+    $firstLine = preg_replace('/<img[^>]+\>/i', '', $firstLine); // Remove embedded images
+    $firstLine = strip_tags($firstLine); // Remove any HTML tags
+    if (strlen($firstLine) > 100) {
+        $firstLine = substr($firstLine, 0, 100) . '...'; // Limit to 100 characters
+    }
+
+    // Handle timestamp.json for recent posts
+    $timestampFilePath = __DIR__ . "/timestamp.json";
+    $timestampData = file_exists($timestampFilePath) ? json_decode(file_get_contents($timestampFilePath), true) : [];
+
+    // Add new post data under current timestamp
+    $timestampData[$CurrentDateTime] = [
+        "title" => $title,
+        "featuredImage" => $featuredImageUrl,
+        "url" => $canonicalUrl,
+        "firstLine" => $firstLine
+    ];
+
+    // Write the updated data back to timestamp.json
+    if (file_put_contents($timestampFilePath, json_encode($timestampData, JSON_PRETTY_PRINT)) === false) {
+        die("Error: Unable to update timestamp.json.");
+    }
+
 
     // Generate hashtag links
     $tagLinks = array_map(function($tag) {
@@ -280,6 +309,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Font Awesome link -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
         <script src="https://kit.fontawesome.com/6c53136549.js" crossorigin="anonymous"></script>
+        <script src="recentposts.js"></script> <!-- Add this line to include the recentposts.js script -->
     </head>
     <body>
     <header class="header">
@@ -308,13 +338,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </ul>
         </div>
     </header>
-    <div class="container">
-        <img src="$featuredImage" class="featured-image" alt="Featured Image">
-        <h1 class="post-title">$title</h1>
-        <p class="post-meta">By $publisherName | $formattedPublishDate</p>
-        <div class="post-content">$content</div>
-        <p class="post-tags">Tags: $tagLinksString</p>
+
+    <div class="row base_container">
+        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12 base_container_col1">
+            <div class="container">
+                <img src="$featuredImage" class="featured-image" alt="Featured Image">
+                <h1 class="post-title">$title</h1>
+                <p class="post-meta">By $publisherName | $formattedPublishDate</p>
+                <div class="post-content">$content</div>
+                <p class="post-tags">Tags: $tagLinksString</p>
+            </div>
+        </div>
+        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12 base_container_col2">
+            <h3>Recent posts:</h3>
+                <div class="recentpost_card">
+                    <h5><!--tilte of the latest post tilte of the latest post--> </h5>
+                    <img src="url to feautred image" alt="">
+                    <p><!-- first line of the blogpost cappears here--></p>
+                    <a href="">Read more</a>
+                </div>
+                <!-- recent posts cards appear here like this -->
+        </div>
     </div>
+
 
     <footer class="footer">
         <div class="footer_sec">
@@ -367,16 +413,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-    <script>
-        function hamburgerToggle() {
-            var menu = document.getElementById("mobileMenu");
-            if (menu.style.display === "block") {
-                menu.style.display = "none";
-            } else {
-                menu.style.display = "block";
-            }
-        }
-    </script>
     </body>
     </html>
 HTML;

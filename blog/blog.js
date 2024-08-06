@@ -86,3 +86,71 @@ document.getElementById('remove-button').addEventListener('click', () => {
     document.getElementById('featured-image').src = 'default-image.png'; // Set to default or placeholder image
     document.getElementById('image-input').value = ''; // Clear the input value
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Fetch the JSON data
+    fetch('timestamp.json')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('adminTableBody');
+            tableBody.innerHTML = ''; // Clear any existing content
+
+            // Loop through the JSON data
+            Object.keys(data).forEach(timestamp => {
+                const post = data[timestamp];
+
+                // Create table row
+                const row = document.createElement('tr');
+
+                // Title column
+                const titleCell = document.createElement('td');
+                titleCell.textContent = post.title;
+                row.appendChild(titleCell);
+
+                // Published Date column
+                const dateCell = document.createElement('td');
+                dateCell.textContent = new Date(timestamp).toLocaleString();
+                row.appendChild(dateCell);
+
+                // Actions column
+                const actionsCell = document.createElement('td');
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.classList.add('btn', 'btn-primary');
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.classList.add('btn', 'btn-danger');
+
+                // Append buttons to actions cell
+                actionsCell.appendChild(editButton);
+                actionsCell.appendChild(deleteButton);
+
+                row.appendChild(actionsCell);
+
+                // Append row to table body
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading JSON data:', error);
+        });
+});

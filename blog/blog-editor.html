@@ -57,7 +57,7 @@
                                 name="focusKeyphrase">
                             <input type="text" placeholder="Add SEO Title" id="seoTitle" name="seoTitle">
                             <input type="text" placeholder="Add Slug" id="slug" name="slug">
-                            <input type="text" placeholder="Add Meta Description" id="MetaDescription"
+                            <input type="text" placeholder="Add Meta Description" id="metaDescription"
                                 name="metaDescription">
                             <input type="hidden" id="tags" name="tags">
                         </section>
@@ -97,7 +97,7 @@
                                 Private
                             </label>
                             <br><br>
-                            <button type="button" id="publish">publish</button>
+                            <button type="button" id="publish">Publish</button>
                         </div>
                     </div>
                 </div>
@@ -132,8 +132,8 @@
             // Submit the form
             document.getElementById('blogForm').submit();
         });
-    </script>
-    <script>
+
+        // Load the post data for editing
         document.addEventListener('DOMContentLoaded', function () {
             const editPostData = localStorage.getItem('editPostData');
 
@@ -142,18 +142,38 @@
 
                 // Populate the form fields with the post data
                 document.getElementById('postTitle').value = postData.title;
-                document.getElementById('content').value = postData.firstLine;
-                document.getElementById('featuredImagePreview').src = postData.featuredImage;
+                quill.root.innerHTML = postData.content; // Populate the Quill editor
+                document.getElementById('focusKeyphrase').value = postData.focusKeyphrase;
+                document.getElementById('seoTitle').value = postData.seoTitle;
+                document.getElementById('slug').value = postData.slug;
+                document.getElementById('metaDescription').value = postData.metaDescription;
+                document.getElementById('tags').value = postData.tags;
 
-                // Continue populating other fields as needed
+                // Populate the featured image
+                document.getElementById('featured-image').src = postData.featuredImage;
+
+                // Populate tags container
+                const tagsContainer = document.getElementById('tags-container');
+                postData.tags.split(',').forEach(tag => {
+                    const tagElement = document.createElement('div');
+                    tagElement.classList.add('tag');
+                    tagElement.textContent = tag;
+                    tagsContainer.appendChild(tagElement);
+                });
+
+                // Populate visibility
+                const visibilityOptions = document.getElementsByName('visibility');
+                visibilityOptions.forEach(option => {
+                    if (option.value === postData.visibility) {
+                        option.checked = true;
+                    }
+                });
 
                 // Clear the local storage entry
                 localStorage.removeItem('editPostData');
             }
         });
-
     </script>
-
 
 </body>
 

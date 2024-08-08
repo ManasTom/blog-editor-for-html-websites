@@ -39,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // User-defined global variables
-    $domainName = 'https://yourdomainname.com/';
-    $rootPath = 'https://yourdomainname.com/blog/';
+    $domainName = 'https://demo.illforddigital.com/';
+    $rootPath = 'https://demo.illforddigital.com/blog/';
     $language = 'en_US';
     $openGraphType = 'article';
     $publisherUrl = 'https://any-social-media-profile-link';
@@ -65,15 +65,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $siteMap = 'sitemap.html';
 
     // Processed variables
-    $canonicalUrl = $rootPath.$slug . '.html';
+    $canonicalUrl = $rootPath . $slug . '.html';
     $CurrentDateTime = date('c');
-    $featuredImageUrl = $rootPath.$featuredImage;
-    $logoImageUrl = $rootPath.$publisherLogo;
+    $featuredImageUrl = $rootPath . $featuredImage;
+    $logoImageUrl = $rootPath . $publisherLogo;
     $formattedPublishDate = date('F j, Y');
-    $blogHomeUrl = $domainName.$blogHome;
-    $privacyPolicyUrl = $domainName.$privacyPolicy;
-    $termsAndConditionUrl = $domainName.$termsAndCondition;
-    $siteMapUrl = $domainName.$siteMap;
+    $blogHomeUrl = $domainName . $blogHome;
+    $privacyPolicyUrl = $domainName . $privacyPolicy;
+    $termsAndConditionUrl = $domainName . $termsAndCondition;
+    $siteMapUrl = $domainName . $siteMap;
 
     // Read the existing tags.json file
     $tagsFilePath = __DIR__ . "/tags.json";
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         return '"' . trim($tag) . '"';
     }, $tagsArray);
     $formattedTagsString = implode(',', $formattedTagsForJson);
-    
+
     $postFileName = $slug . ".html"; // The name of the HTML file being created
     foreach ($tagsArray as $tag) {
         $tag = trim($tag); // Trim any whitespace around the tag
@@ -119,19 +119,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $timestampFilePath = __DIR__ . "/timestamp.json";
     $timestampData = file_exists($timestampFilePath) ? json_decode(file_get_contents($timestampFilePath), true) : [];
 
+    // Check if this post already exists in timestamp.json (by slug or URL)
+    $existingTimestamp = null;
+    foreach ($timestampData as $timestamp => $data) {
+        if ($data['url'] === $canonicalUrl) {
+            $existingTimestamp = $timestamp;
+            break;
+        }
+    }
+
+    // If the post exists, remove the old entry and delete associated files
+    if ($existingTimestamp) {
+        unset($timestampData[$existingTimestamp]);
+        $existingPostFile = __DIR__ . "/" . $slug . ".html";
+        if (file_exists($existingPostFile)) {
+            unlink($existingPostFile); // Delete the old HTML file
+        }
+
+        // If a new image is uploaded, delete the old one
+        if (!empty($_FILES['featuredImage']['name'])) {
+            $oldImage = str_replace($rootPath, '', $timestampData[$existingTimestamp]['featuredImage']);
+            $oldImagePath = __DIR__ . "/" . $oldImage;
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath); // Delete the old featured image
+            }
+        }
+    }
+
     // Add new post data under current timestamp
     $timestampData[$CurrentDateTime] = [
         "title" => $title,
         "featuredImage" => $featuredImageUrl,
         "url" => $canonicalUrl,
-        "firstLine" => $firstLine
+        "firstLine" => $firstLine,
+        "content" => $content,
+        "focusKeyphrase" => $focusKeyphrase,
+        "seoTitle" => $seoTitle,
+        "slug" => $slug,
+        "metaDescription" => $metaDescription,
+        "tags" => $tags,
+        "visibility" => $visibility
     ];
 
     // Write the updated data back to timestamp.json
     if (file_put_contents($timestampFilePath, json_encode($timestampData, JSON_PRETTY_PRINT)) === false) {
         die("Error: Unable to update timestamp.json.");
     }
-
 
     // Generate hashtag links
     $tagLinks = array_map(function($tag) {

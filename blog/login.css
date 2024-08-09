@@ -1,0 +1,45 @@
+body {
+    background-color: #f0f0f1;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(168, 166, 166, 0.3);
+}
+
+.form-control {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: none;
+    border: 1px solid #464141;
+}
+
+.form-control:focus {
+    border: 1px solid #464141;
+    box-shadow: none;
+    outline: none;
+}
+
+.btn-primary {
+    background-color: #000000;
+    border: none;
+    margin-top: 15%;
+    border-radius: 1rem;
+    padding: 3%;
+}
+
+.btn-primary:hover {
+    background-color: #000000;
+    border: none;
+}
+
+#forgotPasswordLink {
+    color: #007bff;
+    text-decoration: none;
+}
+
+#forgotPasswordLink:hover {
+    text-decoration: underline;
+}

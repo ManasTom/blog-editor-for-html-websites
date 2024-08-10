@@ -394,7 +394,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-
     <footer class="footer">
         <div class="footer_sec">
             <div class="row">

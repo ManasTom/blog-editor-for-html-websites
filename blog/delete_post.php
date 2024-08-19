@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 // Delete the featured image
-                $featuredImagePath = str_replace('https://yourdomainname.com/blog/', __DIR__ . '/', $data['featuredImage']);
+                $featuredImagePath = str_replace('https://demo.illforddigital.com/blog/', __DIR__ . '/', $data['featuredImage']);
                 if (file_exists($featuredImagePath)) {
                     unlink($featuredImagePath);
                 }

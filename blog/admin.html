@@ -123,10 +123,29 @@
 
                         // Edit button click event
                         editButton.addEventListener('click', () => {
-                            // Store the post data in local storage
+                            // Store the post data in localStorage
                             localStorage.setItem('editPostData', JSON.stringify(post));
-                            // Redirect to the blog editor page
-                            window.location.href = 'blog-editor.html';
+
+                            // Store data in temp.json via PHP
+                            fetch('store_temp_data.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                                body: new URLSearchParams({
+                                    data: JSON.stringify(post)
+                                })
+                            })
+                                .then(response => response.json())
+                                .then(result => {
+                                    if (result.status === 'success') {
+                                        // Redirect to the blog editor page
+                                        window.location.href = 'blog-editor.html';
+                                    } else {
+                                        alert('Error storing temporary data.');
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
                         });
 
                         // Delete button click event
@@ -170,6 +189,8 @@
                 });
         });
     </script>
+
+
 
 </body>
 

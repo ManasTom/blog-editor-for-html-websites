@@ -5,6 +5,66 @@ ini_set('memory_limit', '512M');
 
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    // Handle deletion if tempId is passed
+    if (isset($_POST['tempId'])) {
+        $tempId = $_POST['tempId'];
+        $tempFilePath = __DIR__ . '/temp.json';
+
+        if (file_exists($tempFilePath)) {
+            $tempData = json_decode(file_get_contents($tempFilePath), true);
+
+            if (isset($tempData[$tempId])) {
+                // Delete related data using temp data
+                $slug = $tempData[$tempId]['slug'];
+
+                // Delete the HTML file
+                $postFileName = __DIR__ . '/' . $slug . '.html';
+                if (file_exists($postFileName)) {
+                    unlink($postFileName);
+                }
+
+                // Delete the featured image
+                $featuredImagePath = str_replace('https://demo.illforddigital.com/blog/', __DIR__ . '/', $tempData[$tempId]['featuredImage']);
+                if (file_exists($featuredImagePath)) {
+                    unlink($featuredImagePath);
+                }
+
+                // Delete from timestamp.json
+                $timestampFilePath = __DIR__ . '/timestamp.json';
+                if (file_exists($timestampFilePath)) {
+                    $timestampData = json_decode(file_get_contents($timestampFilePath), true);
+                    foreach ($timestampData as $timestamp => $data) {
+                        if ($data['slug'] === $slug) {
+                            unset($timestampData[$timestamp]);
+                            file_put_contents($timestampFilePath, json_encode($timestampData, JSON_PRETTY_PRINT));
+                            break;
+                        }
+                    }
+                }
+
+                // Delete from tags.json
+                $tagsFilePath = __DIR__ . '/tags.json';
+                if (file_exists($tagsFilePath)) {
+                    $tagsData = json_decode(file_get_contents($tagsFilePath), true);
+                    foreach ($tagsData['hashtags'] as $tag => $posts) {
+                        if (isset($posts[$slug . '.html'])) {
+                            unset($tagsData['hashtags'][$tag][$slug . '.html']);
+                            if (empty($tagsData['hashtags'][$tag])) {
+                                unset($tagsData['hashtags'][$tag]);
+                            }
+                        }
+                    }
+                    file_put_contents($tagsFilePath, json_encode($tagsData, JSON_PRETTY_PRINT));
+                }
+
+                // Remove temp data after successful deletion
+                unset($tempData[$tempId]);
+                file_put_contents($tempFilePath, json_encode($tempData, JSON_PRETTY_PRINT));
+            }
+        }
+    }
+
     // Ensure all form fields are present
     $required_fields = ['title', 'content', 'focusKeyphrase', 'seoTitle', 'slug', 'metaDescription', 'tags', 'visibility'];
     foreach ($required_fields as $field) {
@@ -438,6 +498,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
     </footer>
+    
+    <script src="recentposts.js"></script>
     <!-- bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"></script>

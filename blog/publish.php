@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             unset($timestampData[$timestamp]);
                             file_put_contents($timestampFilePath, json_encode($timestampData, JSON_PRETTY_PRINT));
                             break;
+
                         }
                     }
                 }

@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             unset($timestampData[$timestamp]);
                             file_put_contents($timestampFilePath, json_encode($timestampData, JSON_PRETTY_PRINT));
                             break;
-
                         }
                     }
                 }
@@ -143,14 +142,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Process each tag and update the tags.json structure
     $tagsArray = explode(',', $tags);
     $formattedTagsForJson = array_map(function($tag) {
-        return '"' . trim($tag) . '"';
+        $tag = trim($tag);
+        if (strpos($tag, '#') !== 0) {
+            $tag = '#' . $tag;
+        }
+        return $tag;
     }, $tagsArray);
     $formattedTagsString = implode(',', $formattedTagsForJson);
 
     $postFileName = $slug . ".html"; // The name of the HTML file being created
     foreach ($tagsArray as $tag) {
         $tag = trim($tag); // Trim any whitespace around the tag
-
         if (!isset($tagsData["hashtags"][$tag])) {
             $tagsData["hashtags"][$tag] = [];
         }
@@ -161,6 +163,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             "featuredImage" => $featuredImageUrl,
             "url" => $canonicalUrl
         ];
+    }
+
+
+    // Remove tags no longer associated with the post
+    foreach ($tagsData['hashtags'] as $tag => $posts) {
+        if (!in_array($tag, $tagsArray)) {
+            unset($tagsData['hashtags'][$tag][$postFileName]);
+            if (empty($tagsData['hashtags'][$tag])) {
+                unset($tagsData['hashtags'][$tag]);
+            }
+        }
     }
 
     // Write the updated data back to tags.json
@@ -229,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Generate hashtag links
     $tagLinks = array_map(function($tag) {
-        return '<a href="hashtagposts.html?tag=' . urlencode(trim($tag)) . '">#' . htmlspecialchars(trim($tag)) . '</a>';
+        return '<a href="hashtagposts.html?tag=' . urlencode(trim($tag)) . '"> ' . htmlspecialchars(trim($tag)) . '</a>';
     }, $tagsArray);
     $tagLinksString = implode(', ', $tagLinks);
 
@@ -241,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="robots" content="index, follow" />
-        <title>$seoTitle</title>
+        <title>$title</title>
         <link rel="shortcut icon" type="image/jpg" href="$favioconLink" />
         <meta name="description" content="$metaDescription" />
         <link rel="canonical" href="$canonicalUrl" />

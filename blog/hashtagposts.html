@@ -126,7 +126,7 @@
             container.innerHTML = ''; // Clear previous content
 
             if (data.hashtags && data.hashtags[hashtag]) {
-                document.getElementById('hashtag-title').textContent = `#${hashtag} Posts`;
+                document.getElementById('hashtag-title').textContent = `${hashtag} Posts`;
 
                 Object.keys(data.hashtags[hashtag]).forEach(postFile => {
                     const post = data.hashtags[hashtag][postFile];

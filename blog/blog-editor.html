@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -123,8 +124,15 @@
 
             // Collect tags
             const tagsContainer = document.getElementById('tags-container');
-            const tags = Array.from(tagsContainer.children).map(tagElement => tagElement.firstChild.textContent);
+            const tags = Array.from(tagsContainer.children).map(tagElement => {
+                // Ensure only one `#` is present
+                let tag = tagElement.firstChild.textContent;
+                tag = tag.replace(/^#+/, ''); // Remove all leading #
+                tag = '#' + tag.trim(); // Add a single #
+                return tag;
+            });
             document.getElementById('tags').value = tags.join(',');
+
 
             // Check if the post is new or being edited
             const isEditing = localStorage.getItem('editPostData') !== null;
@@ -190,7 +198,16 @@
                 postData.tags.split(',').forEach(tag => {
                     const tagElement = document.createElement('div');
                     tagElement.classList.add('tag');
-                    tagElement.textContent = `#${tag}`;
+
+                    // Make the tags editable by adding them back to the input
+                    const removeButton = document.createElement('span');
+                    removeButton.textContent = ' x';
+                    removeButton.classList.add('remove-tag');
+                    removeButton.onclick = function () {
+                        tagsContainer.removeChild(tagElement);
+                    };
+                    tagElement.textContent = tag.startsWith('#') ? tag : `#${tag}`;
+                    tagElement.appendChild(removeButton);
                     tagsContainer.appendChild(tagElement);
                 });
 
@@ -201,6 +218,10 @@
                         option.checked = true;
                     }
                 });
+
+                // Make title and slug non-editable
+                document.getElementById('postTitle').readOnly = true;
+                document.getElementById('slug').readOnly = true;
 
                 // Store the data in temp.json
                 fetch('store_temp_data.php', {
@@ -224,4 +245,5 @@
         });
     </script>
 </body>
+
 </html>

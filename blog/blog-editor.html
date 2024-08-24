@@ -60,6 +60,7 @@
                             <input type="text" placeholder="Add Meta Description" id="metaDescription"
                                 name="metaDescription">
                             <input type="hidden" id="tags" name="tags">
+                            <input type="hidden" id="isEditing" name="isEditing" value="">
                         </section>
                     </div>
 
@@ -82,6 +83,13 @@
                                 <button type="button" id="add-tag-button">Add</button>
                             </div>
                             <div class="tags-container" id="tags-container"></div>
+                        </div>
+
+                        <div class="categories_card">
+                            <p>Category</p>
+                            <input type="radio" name="category" id="blog" value="blog"><label for="blog">&nbsp; Blog</label>
+                            <br>
+                            <input type="radio" name="category" id="caseStudy" value="case Study"><label for="caseStudy">&nbsp; Case Study</label>
                         </div>
 
                         <div class="actions_card">
@@ -118,6 +126,7 @@
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
     <script src="blog.js"></script>
     <script>
+
         document.getElementById('publish').addEventListener('click', function () {
             // Get the content from the editor
             document.getElementById('content').value = quill.root.innerHTML;
@@ -133,44 +142,31 @@
             });
             document.getElementById('tags').value = tags.join(',');
 
-
             // Check if the post is new or being edited
             const isEditing = localStorage.getItem('editPostData') !== null;
 
-            if (isEditing) {
-                // Fetch temp data before publishing
-                fetch('temp.json')
-                    .then(response => response.json())
-                    .then(tempData => {
-                        const tempId = Object.keys(tempData)[0]; // Assuming only one ID is stored
-                        const dataToDelete = tempData[tempId];
-
-                        // Delete existing data before publishing
-                        fetch('delete_post.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            body: new URLSearchParams({
-                                slug: dataToDelete.slug,
-                                tempId: tempId // Pass the temp ID for deletion
-                            })
+            if (!isEditing) {  // Slug check only for new posts
+                // If creating a new post, check if a file with the same slug already exists
+                const slug = document.getElementById('slug').value.trim();
+                if (slug) {
+                    fetch('check_slug.php?slug=' + encodeURIComponent(slug))
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.exists) {
+                                alert('A file with this slug name already exists. Please choose a different slug.');
+                            } else {
+                                // Proceed with publishing if no file with the same slug exists
+                                document.getElementById('blogForm').submit();
+                            }
                         })
-                            .then(response => response.json())
-                            .then(result => {
-                                if (result.status === 'success') {
-                                    // Proceed with publishing after successful deletion
-                                    document.getElementById('blogForm').submit();
-                                } else {
-                                    alert('Error deleting existing post.');
-                                }
-                            })
-                            .catch(error => console.error('Error:', error));
-                    })
-                    .catch(error => console.error('Error loading temp data:', error));
+                        .catch(error => console.error('Error checking slug:', error));
+                } else {
+                    alert('Slug cannot be empty.');
+                }
             } else {
-                // For new posts, just submit the form directly
+                // For existing posts (editing), skip the slug check and submit the form directly
                 document.getElementById('blogForm').submit();
+                localStorage.removeItem('editPostData');
             }
         });
 
@@ -239,10 +235,10 @@
                     })
                     .catch(error => console.error('Error:', error));
 
-                // Clear the local storage entry
-                localStorage.removeItem('editPostData');
+                
             }
         });
+
     </script>
 </body>
 

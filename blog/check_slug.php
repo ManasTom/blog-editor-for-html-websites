@@ -1,14 +1,15 @@
 <?php
 if (isset($_GET['slug'])) {
     $slug = htmlspecialchars($_GET['slug']);
-    $filePath = __DIR__ . '/' . $slug . '.html';
-    $response = ['exists' => false];
+    $postFileName = __DIR__ . "/" . $slug . ".html";
 
-    if (file_exists($filePath)) {
-        $response['exists'] = true;
+    // Check if a file with the slug name exists in the root directory
+    if (file_exists($postFileName)) {
+        echo json_encode(['exists' => true]);
+    } else {
+        echo json_encode(['exists' => false]);
     }
-
-    header('Content-Type: application/json');
-    echo json_encode($response);
+} else {
+    echo json_encode(['error' => 'No slug provided']);
 }
 ?>

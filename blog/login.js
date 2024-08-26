@@ -23,7 +23,7 @@ document.getElementById('loginBtn').addEventListener('click', function () {
             // Signed in 
             var user = userCredential.user;
             // Redirect to blog.html
-            window.location.href = 'blog-editor.html';
+            window.location.href = 'admin.html';
         })
         .catch((error) => {
             var errorCode = error.code;

@@ -88,7 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $plainTextContent = strip_tags($content);
     $firstLine = mb_substr($plainTextContent, 0, 100);
 
-
     // Handle image upload
     $targetDir = "uploads/";
     $featuredImage = "";

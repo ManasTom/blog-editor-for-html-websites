@@ -350,6 +350,28 @@ body {
     width: 100%;
 }
 
+.categorypostscontainer {
+    margin-top: 1%;
+}
+
+.categoryposts {
+    width: 90% !important;
+    margin-left: 5% !important;
+    margin-right: 5% !important;
+    margin-top: 5% !important;
+    margin-bottom: 5% !important;
+    box-shadow: 0 0 10px rgb(0 0 0 / 71%);
+    border-radius: 0.3rem;
+    padding: 2%;
+}
+
+.post-preview-card {
+    height: 100%;
+    box-shadow: 0 0 10px rgb(0 0 0 / 71%);
+    border-radius: 0.3rem;
+    padding: 2%;
+}
+
 * {
     /* border: 1px solid red; */
 }

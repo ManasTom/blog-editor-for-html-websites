@@ -89,7 +89,7 @@
                             <p>Category</p>
                             <input type="radio" name="category" id="blog" value="blog"><label for="blog">&nbsp; Blog</label>
                             <br>
-                            <input type="radio" name="category" id="caseStudy" value="case Study"><label for="caseStudy">&nbsp; Case Study</label>
+                            <input type="radio" name="category" id="caseStudy" value="case study"><label for="caseStudy">&nbsp; Case Study</label>
                         </div>
 
                         <div class="actions_card">
@@ -126,7 +126,6 @@
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
     <script src="blog.js"></script>
     <script>
-
         document.getElementById('publish').addEventListener('click', function () {
             // Get the content from the editor
             document.getElementById('content').value = quill.root.innerHTML;
@@ -207,6 +206,14 @@
                     tagsContainer.appendChild(tagElement);
                 });
 
+                // Populate category
+                const categoryOptions = document.getElementsByName('category');
+                categoryOptions.forEach(option => {
+                    if (option.value.toLowerCase() === postData.category.toLowerCase()) {
+                        option.checked = true;
+                    }
+                });
+
                 // Populate visibility
                 const visibilityOptions = document.getElementsByName('visibility');
                 visibilityOptions.forEach(option => {
@@ -234,8 +241,6 @@
                         }
                     })
                     .catch(error => console.error('Error:', error));
-
-                
             }
         });
 

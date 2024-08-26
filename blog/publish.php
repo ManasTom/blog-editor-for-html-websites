@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Ensure all form fields are present
-    $required_fields = ['title', 'content', 'focusKeyphrase', 'seoTitle', 'slug', 'metaDescription', 'tags', 'visibility'];
+    $required_fields = ['title', 'content', 'focusKeyphrase', 'seoTitle', 'slug', 'metaDescription', 'tags', 'visibility', 'category'];
     foreach ($required_fields as $field) {
         if (!isset($_POST[$field])) {
             die("Error: Missing $field");
@@ -82,9 +82,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $metaDescription = htmlspecialchars($_POST['metaDescription']);
     $tags = $_POST['tags'];
     $visibility = $_POST['visibility'];
+    $category = htmlspecialchars($_POST['category']); // New category field
 
     // Extract the first line from the content
-    $firstLine = strtok($content, "\n");
+    $plainTextContent = strip_tags($content);
+    $firstLine = mb_substr($plainTextContent, 0, 100);
+
 
     // Handle image upload
     $targetDir = "uploads/";
@@ -134,6 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $privacyPolicyUrl = $domainName . $privacyPolicy;
     $termsAndConditionUrl = $domainName . $termsAndCondition;
     $siteMapUrl = $domainName . $siteMap;
+    $categoryLinks = '<a href="categories.html?category=' . urlencode($category) . '">' . htmlspecialchars($category) . '</a>';
 
     // Read the existing tags.json file
     $tagsFilePath = __DIR__ . "/tags.json";
@@ -161,10 +165,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $tagsData["hashtags"][$tag][$postFileName] = [
             "title" => $title,
             "featuredImage" => $featuredImageUrl,
-            "url" => $canonicalUrl
+            "url" => $canonicalUrl,
+            "category" => $category // Include category in tags.json
         ];
     }
-
 
     // Remove tags no longer associated with the post
     foreach ($tagsData['hashtags'] as $tag => $posts) {
@@ -179,14 +183,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Write the updated data back to tags.json
     if (file_put_contents($tagsFilePath, json_encode($tagsData, JSON_PRETTY_PRINT)) === false) {
         die("Error: Unable to update tags.json.");
-    }
-
-    // Extract the first line from the content, remove any embedded images, and limit to 100 characters
-    $firstLine = strtok($content, "\n"); // Get the first line of the content
-    $firstLine = preg_replace('/<img[^>]+\>/i', '', $firstLine); // Remove embedded images
-    $firstLine = strip_tags($firstLine); // Remove any HTML tags
-    if (strlen($firstLine) > 100) {
-        $firstLine = substr($firstLine, 0, 100) . '...'; // Limit to 100 characters
     }
 
     // Handle timestamp.json for recent posts
@@ -232,7 +228,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "slug" => $slug,
         "metaDescription" => $metaDescription,
         "tags" => $tags,
-        "visibility" => $visibility
+        "visibility" => $visibility,
+        "category" => $category // Include category in timestamp.json
     ];
 
     // Write the updated data back to timestamp.json
@@ -245,6 +242,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         return '<a href="hashtagposts.html?tag=' . urlencode(trim($tag)) . '"> ' . htmlspecialchars(trim($tag)) . '</a>';
     }, $tagsArray);
     $tagLinksString = implode(', ', $tagLinks);
+
+    // Create category links
+    $categoryLinks = '<a href="categories.html?category=blog">Blog</a>, <a href="categories.html?category=case%20study">Case Study</a>';
 
     // Create the blog post content with updated styling and hashtag links
     $blogPostContent = <<<HTML
@@ -454,14 +454,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <p class="post-meta">By $publisherName | $formattedPublishDate</p>
                 <div class="post-content">$content</div>
                 <p class="post-tags">Tags: $tagLinksString</p>
+                <p class="post-categories">Category: $categoryLinks</p>
             </div>
         </div>
         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12 base_container_col2">
             <h3>Recent posts:</h3>
                 <div class="recentpost_card">
-                    <h5><!--tilte of the latest post tilte of the latest post--> </h5>
-                    <img src="url to feautred image" alt="">
-                    <p><!-- first line of the blogpost cappears here--></p>
+                    <h5><!--title of the latest post title of the latest post--> </h5>
+                    <img src="url to featured image" alt="">
+                    <p><!-- first line of the blogpost appears here--></p>
                     <a href="">Read more</a>
                 </div>
                 <!-- recent posts cards appear here like this -->
@@ -516,9 +517,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="recentposts.js"></script>
     <!-- bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"></script>
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5pNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     </body>

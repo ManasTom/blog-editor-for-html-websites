@@ -73,6 +73,7 @@
                             </div>
                             <input type="file" id="image-input" accept="image/*" name="featuredImage"
                                 style="display: none;">
+                                
                             <button type="button" id="upload-button">Click here to add or update</button>
                             <button type="button" id="remove-button">Remove featured image</button>
                         </div>
@@ -137,7 +138,7 @@
     <script src="fireconfig.js"></script> <!-- Your Firebase config file -->
 
     <script>
-        
+
         // Firebase Authentication to check if a user is logged in
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
@@ -213,13 +214,23 @@
                 const postData = JSON.parse(editPostData);
 
                 // Populate the form fields with the post data
-                document.getElementById('postTitle').value = postData.title;
+                document.getElementById('postTitle').addEventListener('input', function () {
+                    let title = this.value;
+                    let slug = title.toLowerCase() // Convert to lowercase
+                        .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+                        .trim() // Remove leading/trailing spaces
+                        .replace(/\s+/g, '-') // Replace spaces with hyphens
+                        .replace(/-+/g, '-'); // Replace multiple hyphens with single hyphen
+
+                    document.getElementById('slug').value = slug;
+                });
                 quill.root.innerHTML = postData.content; // Populate the Quill editor
                 document.getElementById('focusKeyphrase').value = postData.focusKeyphrase;
                 document.getElementById('seoTitle').value = postData.seoTitle;
                 document.getElementById('slug').value = postData.slug;
                 document.getElementById('metaDescription').value = postData.metaDescription;
                 document.getElementById('tags').value = postData.tags;
+                document.getElementById('postTitle').value = postData.title;
 
                 // Populate the featured image
                 document.getElementById('featured-image').src = postData.featuredImage;
@@ -280,6 +291,18 @@
             }
         });
 
+    </script>
+    <script>
+        document.getElementById('postTitle').addEventListener('input', function () {
+            let title = this.value;
+            let slug = title.toLowerCase() // Convert to lowercase
+                          .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+                          .trim() // Remove leading/trailing spaces
+                          .replace(/\s+/g, '-') // Replace spaces with hyphens
+                          .replace(/-+/g, '-'); // Replace multiple hyphens with single hyphen
+    
+            document.getElementById('slug').value = slug;
+        });
     </script>
 </body>
 

@@ -91,13 +91,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Handle image upload
     $targetDir = "uploads/";
     $featuredImage = "";
+
+    // Check if the post is being edited
+    $isEditing = isset($_POST['isEditing']) && $_POST['isEditing'] === 'true';
+
     if (!empty($_FILES['featuredImage']['name'])) {
+        // If a new image is uploaded, process the image
         $targetFile = $targetDir . basename($_FILES["featuredImage"]["name"]);
         if (move_uploaded_file($_FILES["featuredImage"]["tmp_name"], $targetFile)) {
             $featuredImage = $targetFile;
         } else {
             die("Error: Unable to upload image.");
         }
+    } else {
+        // If no new image is uploaded and this is an edit, retain the existing image
+        if ($isEditing) {
+            $timestampFilePath = __DIR__ . '/timestamp.json';
+            if (file_exists($timestampFilePath)) {
+                $timestampData = json_decode(file_get_contents($timestampFilePath), true);
+                foreach ($timestampData as $timestamp => $data) {
+                    if ($data['slug'] === $slug) {
+                        $featuredImage = str_replace($rootPath, '', $data['featuredImage']);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    // If the featured image is still empty, ensure it's not accidentally cleared
+    if (empty($featuredImage)) {
+        die("Error: Featured image is missing.");
     }
 
     // User-defined global variables
@@ -245,9 +269,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Create category links
     $categoryLinks = '<a href="categories.html?category=blog">Blog</a>, <a href="categories.html?category=case%20study">Case Study</a>';
 
-    // Create the blog post content with updated styling and hashtag links
-    $blogPostContent = <<<HTML
-    <!DOCTYPE html>
+    if ($visibility === 'public') {
+        // Generate hashtag links
+        $tagLinks = array_map(function($tag) {
+            return '<a href="hashtagposts.html?tag=' . urlencode(trim($tag)) . '"> ' . htmlspecialchars(trim($tag)) . '</a>';
+        }, $tagsArray);
+        $tagLinksString = implode(', ', $tagLinks);
+    
+        // Create the blog post content with updated styling and hashtag links
+        $blogPostContent = <<<HTML
+        <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -527,6 +558,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </html>
 HTML;
 
+
+    // Save the blog post content to a file in the root directory
+    $postFileName = __DIR__ . "/" . $slug . ".html";
+    if (file_put_contents($postFileName, $blogPostContent) === false) {
+        die("Error: Unable to save the blog post.");
+    }
+
+    echo "Post published successfully!";
+} else {
+    echo "Post saved as private. No HTML file created.";
+}
+
+
     // Save the blog post content to a file in the root directory
     $postFileName = __DIR__ . "/" . $slug . ".html";
     if (file_put_contents($postFileName, $blogPostContent) === false) {
@@ -538,7 +582,7 @@ HTML;
     echo "Error: Invalid request method.";
 }
 
-include_once('clear_temp_json.php');
-include_once('clear_junk_files.php');
 
+include_once('clear_temp_json.php');
+include_once('clear_temp_json.php');
 ?>

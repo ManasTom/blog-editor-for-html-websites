@@ -64,6 +64,7 @@
                         <tr>
                             <th>Title</th>
                             <th>Published Date</th>
+                            <th>Publish Status</th> <!-- New column -->
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -123,11 +124,9 @@
                 .then(data => {
                     tableBody.innerHTML = ''; // Clear any existing content
 
-                    // Loop through the JSON data
                     Object.keys(data).forEach(timestamp => {
                         const post = data[timestamp];
 
-                        // Create table row
                         const row = document.createElement('tr');
 
                         // Title column
@@ -139,6 +138,11 @@
                         const dateCell = document.createElement('td');
                         dateCell.textContent = new Date(timestamp).toLocaleString();
                         row.appendChild(dateCell);
+
+                        // Publish Status column
+                        const statusCell = document.createElement('td');
+                        statusCell.textContent = post.visibility === 'public' ? 'Public' : 'Private';
+                        row.appendChild(statusCell);
 
                         // Actions column
                         const actionsCell = document.createElement('td');

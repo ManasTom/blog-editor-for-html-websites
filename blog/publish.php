@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Extract the first line from the content
     $plainTextContent = strip_tags($content);
-    $firstLine = mb_substr($plainTextContent, 0, 100);
+    $firstLine = substr($plainTextContent, 0, 100);
 
     // Handle image upload
     $targetDir = "uploads/";
@@ -537,4 +537,7 @@ HTML;
 } else {
     echo "Error: Invalid request method.";
 }
+
+
+include_once('clear_temp_json.php');
 ?>

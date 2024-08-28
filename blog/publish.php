@@ -538,6 +538,7 @@ HTML;
     echo "Error: Invalid request method.";
 }
 
-
 include_once('clear_temp_json.php');
+include_once('clear_junk_files.php');
+
 ?>

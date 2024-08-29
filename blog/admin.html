@@ -47,7 +47,7 @@
     <section class="admin_section">
         <div class="row actions_row">
             <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12 actions_row_col1">
-                <button onclick="window.location.href='blog-editor.html'">Add New Post</button>
+                <button id="addNewPostButton">Add New Post</button>
             </div>
             <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12 actions_row_col2">
                 <button><i class="fa-solid fa-arrows-rotate"></i></button>
@@ -237,6 +237,26 @@
         // Refresh button functionality
         document.getElementById('refreshButton').addEventListener('click', function () {
             loadAdminData(); // Reload the admin data when refresh button is clicked
+        });
+    </script>
+    <script>
+        document.getElementById('addNewPostButton').addEventListener('click', function () {
+            localStorage.clear();
+            // Make an AJAX request to clear_temp_json.php
+            fetch('clear_temp_json.php')
+                .then(response => response.text()) // Handle response as plain text
+                .then(data => {
+                    if (data.includes('temp.json has been cleared')) {
+                        // Redirect to the blog-editor page after clearing temp.json
+                        window.location.href = 'blog-editor.html';
+                    } else {
+                        alert('Error clearing temporary data. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error clearing temporary data. Please try again.');
+                });
         });
     </script>
 </body>

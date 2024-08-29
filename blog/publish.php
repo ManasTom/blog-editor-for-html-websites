@@ -565,9 +565,9 @@ HTML;
         die("Error: Unable to save the blog post.");
     }
 
-    echo "Post published successfully!";
+    echo "<script>alert('Post published successfully!'); window.location.href = 'admin.html';</script>";
 } else {
-    echo "Post saved as private. No HTML file created.";
+    echo "<script>alert('Post saved as private'); window.location.href = 'admin.html';</script>";
 }
 
 
@@ -577,10 +577,11 @@ HTML;
         die("Error: Unable to save the blog post.");
     }
 
-    echo "Post published successfully!";
+    echo "<script>alert('Post published successfully!'); window.location.href = 'admin.html';</script>";
 } else {
-    echo "Error: Invalid request method.";
+    echo "<script>alert('Error: Invalid request method.'); window.location.href = 'admin.html';</script>";
 }
+
 
 
 include_once('clear_temp_json.php');

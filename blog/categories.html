@@ -110,25 +110,29 @@
                         const posts = Object.values(data).filter(post => post.category.toLowerCase() === category.toLowerCase());
 
                         posts.forEach(post => {
-                            const postCard = document.createElement('div');
-                            postCard.classList.add('col-md-4','categorypostscontainer');
+                            // Check if the post is public
+                            if (post.visibility === 'public') {
+                                const postCard = document.createElement('div');
+                                postCard.classList.add('col-md-4', 'categorypostscontainer');
 
-                            postCard.innerHTML = `
-                            <div class="post-preview-card">
-                                <img src="${post.featuredImage}" alt="${post.title}">
-                                <h3>${post.title}</h3>
-                                <p>${post.firstLine}</p>
-                                <a href="${post.url}">Read more</a>
-                            </div>
-                        `;
+                                postCard.innerHTML = `
+                        <div class="post-preview-card">
+                            <img src="${post.featuredImage}" alt="${post.title}">
+                            <h3>${post.title}</h3>
+                            <p>${post.firstLine}</p>
+                            <a href="${post.url}">Read more</a>
+                        </div>
+                    `;
 
-                            categoryPostsContainer.appendChild(postCard);
+                                categoryPostsContainer.appendChild(postCard);
+                            }
                         });
                     })
                     .catch(error => console.error('Error loading posts:', error));
             } else {
                 categoryTitle.textContent = 'Category not found';
             }
+
         });
     </script> <!-- Add this line to include the categories.js script -->
     <!-- bootstrap -->

@@ -64,7 +64,7 @@
                         <tr>
                             <th>Title</th>
                             <th>Published Date</th>
-                            <th>Publish Status</th> <!-- New column -->
+                            <th>Publish Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -146,12 +146,20 @@
 
                         // Actions column
                         const actionsCell = document.createElement('td');
+                        const viewButton = document.createElement('button');
+                        viewButton.textContent = 'View';
+                        viewButton.classList.add('btn', 'btn-success');
                         const editButton = document.createElement('button');
                         editButton.textContent = 'Edit';
                         editButton.classList.add('btn', 'btn-primary');
                         const deleteButton = document.createElement('button');
                         deleteButton.textContent = 'Delete';
                         deleteButton.classList.add('btn', 'btn-danger');
+
+                        // View button click event
+                        viewButton.addEventListener('click', () => {
+                            window.open(post.url, '_blank');
+                        });
 
                         // Edit button click event
                         editButton.addEventListener('click', () => {
@@ -207,6 +215,7 @@
                         });
 
                         // Append buttons to actions cell
+                        actionsCell.appendChild(viewButton); // Add the new 'View' button
                         actionsCell.appendChild(editButton);
                         actionsCell.appendChild(deleteButton);
 
@@ -238,8 +247,7 @@
         document.getElementById('refreshButton').addEventListener('click', function () {
             loadAdminData(); // Reload the admin data when refresh button is clicked
         });
-    </script>
-    <script>
+
         document.getElementById('addNewPostButton').addEventListener('click', function () {
             localStorage.clear();
             // Make an AJAX request to clear_temp_json.php
@@ -260,5 +268,5 @@
         });
     </script>
 </body>
-
 </html>
+

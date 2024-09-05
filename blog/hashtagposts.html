@@ -130,18 +130,21 @@
 
                 Object.keys(data.hashtags[hashtag]).forEach(postFile => {
                     const post = data.hashtags[hashtag][postFile];
-
+                    console.log(post.visibility);
                     // Create post preview card using existing structure and classes
                     const postCard = document.createElement('div');
                     postCard.classList.add('col-xl-4', 'col-lg-4', 'col-md-4', 'col-sm-6', 'col-12', 'hashtagpostcontainer');
-                    postCard.innerHTML = `
+                    if (post.visibility === 'public') {
+                        postCard.innerHTML = `
                             <div class="hashtagpostcard">
                                 <img src="${post.featuredImage}" alt="Featured Image">
                                 <h5>${post.title}</h5>
                                 <a href="${post.url}">Read more</a>
                             </div>
                         `;
-                    container.appendChild(postCard);
+                        container.appendChild(postCard);
+                    }
+
                 });
             } else {
                 container.innerHTML = '<p>No posts available for this hashtag.</p>';

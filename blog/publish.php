@@ -189,7 +189,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             "title" => $title,
             "featuredImage" => $featuredImageUrl,
             "url" => $canonicalUrl,
-            "category" => $category // Include category in tags.json
+            "category" => $category, // Include category in tags.json
+            "visibility" => $visibility
         ];
     }
 

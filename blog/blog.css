@@ -397,6 +397,16 @@ li[data-list="unchecked"]::marker {
     color: black; /* Set the color for empty boxes */
 }
 
+.ql-video{
+    width: 100%;
+    height: 80vh;
+}
+
+
+.recentpost_card{
+    margin-bottom: 20px;
+}
+
 
 
 * {

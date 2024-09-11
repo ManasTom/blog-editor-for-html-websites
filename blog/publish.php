@@ -1,7 +1,12 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Increase maximum execution time and memory limit if needed
 ini_set('max_execution_time', '300');
 ini_set('memory_limit', '512M');
+
 
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -73,56 +78,66 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    // Get form data
-    $title = htmlspecialchars($_POST['title']);
-    $content = $_POST['content'];
-    $focusKeyphrase = htmlspecialchars($_POST['focusKeyphrase']);
-    $seoTitle = htmlspecialchars($_POST['seoTitle']);
-    $slug = htmlspecialchars($_POST['slug']);
-    $metaDescription = htmlspecialchars($_POST['metaDescription']);
-    $tags = $_POST['tags'];
-    $visibility = $_POST['visibility'];
-    $category = htmlspecialchars($_POST['category']); // New category field
-
-    // Extract the first line from the content
-    $plainTextContent = strip_tags($content);
-    $firstLine = substr($plainTextContent, 0, 100);
-
-    // Handle image upload
-    $targetDir = "uploads/";
-    $featuredImage = "";
-
-    // Check if the post is being edited
-    $isEditing = isset($_POST['isEditing']) && $_POST['isEditing'] === 'true';
-
-    if (!empty($_FILES['featuredImage']['name'])) {
-        // If a new image is uploaded, process the image
-        $targetFile = $targetDir . basename($_FILES["featuredImage"]["name"]);
-        if (move_uploaded_file($_FILES["featuredImage"]["tmp_name"], $targetFile)) {
-            $featuredImage = $targetFile;
+        // Get form data
+        $title = htmlspecialchars($_POST['title']);
+        $content = $_POST['content'];
+        $focusKeyphrase = htmlspecialchars($_POST['focusKeyphrase']);
+        $seoTitle = htmlspecialchars($_POST['seoTitle']);
+        $slug = htmlspecialchars($_POST['slug']);
+        $metaDescription = htmlspecialchars($_POST['metaDescription']);
+        $tags = $_POST['tags'];
+        $visibility = $_POST['visibility'];
+        $category = htmlspecialchars($_POST['category']); // New category field
+    
+        // Extract the first line from the content
+        $plainTextContent = strip_tags($content);
+        $firstLine = substr($plainTextContent, 0, 100);
+    
+        // Handle image upload
+        $targetDir = "uploads/";
+        $featuredImage = "";
+    
+        // Check if the post is being edited
+        $isEditing = isset($_POST['isEditing']) && $_POST['isEditing'] === 'true';
+    
+        if (!empty($_FILES['featuredImage']['name'])) {
+            // If a new image is uploaded, process the image
+            $targetFile = $targetDir . basename($_FILES["featuredImage"]["name"]);
+            if (move_uploaded_file($_FILES["featuredImage"]["tmp_name"], $targetFile)) {
+                $featuredImage = $targetFile;
+            } else {
+                echo"<script type='text/javascript'>alert('Invalid request method.');</script>";
+                // die("Error: Unable to upload image.");
+            }
         } else {
-            die("Error: Unable to upload image.");
-        }
-    } else {
-        // If no new image is uploaded and this is an edit, retain the existing image
-        if ($isEditing) {
-            $timestampFilePath = __DIR__ . '/timestamp.json';
-            if (file_exists($timestampFilePath)) {
-                $timestampData = json_decode(file_get_contents($timestampFilePath), true);
-                foreach ($timestampData as $timestamp => $data) {
-                    if ($data['slug'] === $slug) {
-                        $featuredImage = str_replace($rootPath, '', $data['featuredImage']);
-                        break;
+            // If no new image is uploaded and this is an edit, retain the existing image
+            if ($isEditing) {
+                $timestampFilePath = __DIR__ . '/timestamp.json';
+                if (file_exists($timestampFilePath)) {
+                    $timestampData = json_decode(file_get_contents($timestampFilePath), true);
+                    foreach ($timestampData as $timestamp => $data) {
+                        if ($data['slug'] === $slug) {
+                            $featuredImage = str_replace($data['featuredImage']);
+                            break;
+                        }
                     }
                 }
             }
         }
-    }
-
-    // If the featured image is still empty, ensure it's not accidentally cleared
-    if (empty($featuredImage)) {
-        die("Error: Featured image is missing.");
-    }
+    
+        // If the featured image is still empty, ensure it's not accidentally cleared
+        if (empty($featuredImage)) {
+            $timestampFilePath = __DIR__ . '/timestamp.json';
+                if (file_exists($timestampFilePath)) {
+                    $timestampData = json_decode(file_get_contents($timestampFilePath), true);
+                    foreach ($timestampData as $timestamp => $data) {
+                        if ($data['slug'] === $slug) {
+                            $featuredImage = str_replace($rootPath, '', $data['featuredImage']);
+                            break;
+                        }
+                    }
+                }
+        }
 
     // User-defined global variables
     $domainName = 'https://demo.illforddigital.com/';
@@ -150,6 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $termsAndCondition = 'terms-and-condition.html';
     $siteMap = 'sitemap.html';
 
+    
     // Processed variables
     $canonicalUrl = $rootPath . $slug . '.html';
     $CurrentDateTime = date('c');
@@ -240,10 +256,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
+
     // Add new post data under current timestamp
     $timestampData[$CurrentDateTime] = [
         "title" => $title,
-        "featuredImage" => $featuredImageUrl,
+        "featuredImage" => $featuredImage,
         "url" => $canonicalUrl,
         "firstLine" => $firstLine,
         "content" => $content,
@@ -255,6 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "visibility" => $visibility,
         "category" => $category // Include category in timestamp.json
     ];
+
 
     // Write the updated data back to timestamp.json
     if (file_put_contents($timestampFilePath, json_encode($timestampData, JSON_PRETTY_PRINT)) === false) {
@@ -276,6 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return '<a href="hashtagposts.html?tag=' . urlencode(trim($tag)) . '"> ' . htmlspecialchars(trim($tag)) . '</a>';
         }, $tagsArray);
         $tagLinksString = implode(', ', $tagLinks);
+    
     
         // Create the blog post content with updated styling and hashtag links
         $blogPostContent = <<<HTML
@@ -478,7 +497,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </header>
 
     <div class="row base_container">
-        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12 base_container_col1">
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12 base_container_col1">
             <div class="container">
                 <img src="$featuredImage" class="featured-image" alt="Featured Image">
                 <h1 class="post-title">$title</h1>
@@ -488,7 +507,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <p class="post-categories">Category: $categoryLinks</p>
             </div>
         </div>
-        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12 base_container_col2">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 base_container_col2">
             <h3>Recent posts:</h3>
                 <div class="recentpost_card">
                     <h5><!--title of the latest post title of the latest post--> </h5>
@@ -558,7 +577,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </body>
     </html>
 HTML;
-
 
     // Save the blog post content to a file in the root directory
     $postFileName = __DIR__ . "/" . $slug . ".html";

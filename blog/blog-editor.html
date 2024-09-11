@@ -70,6 +70,7 @@
                             <div class="image-preview" id="image-preview">
                                 <p>Add Featured Image</p>
                                 <img id="featured-image" src="default-image.png" alt="Featured image">
+                                <input type="hidden" id="featured-image-url" name="featured-image-url" value="">
                             </div>
                             <input type="file" id="image-input" accept="image/*" name="featuredImage"
                                 style="display: none;">
@@ -136,7 +137,15 @@
     <!-- Import Firebase Authentication -->
     <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
     <script src="fireconfig.js"></script> <!-- Your Firebase config file -->
-
+    <script>
+        // When the page loads, populate the hidden input field with the current image src
+        window.onload = function () {
+            var featuredImage = document.getElementById('featured-image');
+            if (featuredImage) {
+                document.getElementById('featured-image-url').value = featuredImage.src;
+            }
+        };
+    </script>
     <script>
 
         // Firebase Authentication to check if a user is logged in
@@ -164,6 +173,10 @@
 
     <script>
         document.getElementById('publish').addEventListener('click', function () {
+            var featuredImage = document.getElementById('featured-image');
+            if (featuredImage) {
+                document.getElementById('featured-image-url').value = featuredImage.src;
+            }
             // Get the content from the editor
             document.getElementById('content').value = quill.root.innerHTML;
 
@@ -310,7 +323,6 @@
                 event.preventDefault();
             }
         });
-
     </script>
 </body>
 

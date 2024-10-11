@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIMPLI</title>
     <link rel="stylesheet" href="blog.css">
+    <link rel="stylesheet" href="ql.css">
 
     <!-- bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -50,7 +51,6 @@
                 <button id="addNewPostButton">Add New Post</button>
             </div>
             <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12 actions_row_col2">
-                <!-- <button><i class="fa-solid fa-arrows-rotate"></i></button> -->
                 <input type="text" name="admin_search" id="admin_search" placeholder="Search">
                 <button id="searchButton"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
@@ -74,7 +74,6 @@
                 </table>
             </div>
         </div>
-
     </section>
 
     <!-- bootstrap -->
@@ -152,6 +151,15 @@
                         const deleteButton = document.createElement('button');
                         deleteButton.textContent = 'Delete';
                         deleteButton.classList.add('btn', 'btn-danger');
+                        const viewButton = document.createElement('button'); // View button
+                        viewButton.textContent = 'View';
+                        viewButton.classList.add('btn', 'btn-info');
+
+                        // View button click event
+                        viewButton.addEventListener('click', () => {
+                            const postUrl = `https://demo.illforddigital.com/blog/${post.slug}.html`; // Assuming this URL structure
+                            window.open(postUrl, '_blank'); // Open the post in a new tab
+                        });
 
                         // Edit button click event
                         editButton.addEventListener('click', () => {
@@ -207,6 +215,7 @@
                         });
 
                         // Append buttons to actions cell
+                        actionsCell.appendChild(viewButton); // Append the new view button
                         actionsCell.appendChild(editButton);
                         actionsCell.appendChild(deleteButton);
 
@@ -220,7 +229,7 @@
                     console.error('Error loading JSON data:', error);
                 });
         }
-
+        
         // Function to load admin data with optional search query
         function loadAdminData(searchQuery = '') {
             const tableBody = document.getElementById('adminTableBody');
@@ -265,6 +274,15 @@
                         const deleteButton = document.createElement('button');
                         deleteButton.textContent = 'Delete';
                         deleteButton.classList.add('btn', 'btn-danger');
+                        const viewButton = document.createElement('button'); // View button
+                        viewButton.textContent = 'View';
+                        viewButton.classList.add('btn', 'btn-info');
+                        
+                        // View button click event
+                        viewButton.addEventListener('click', () => {
+                            const postUrl = `https://demo.illforddigital.com/blog/${post.slug}.html`; // Assuming this URL structure
+                            window.open(postUrl, '_blank'); // Open the post in a new tab
+                        });
 
                         // Edit button click event
                         editButton.addEventListener('click', () => {
@@ -320,6 +338,7 @@
                         });
 
                         // Append buttons to actions cell
+                        actionsCell.appendChild(viewButton); // Append the new view button
                         actionsCell.appendChild(editButton);
                         actionsCell.appendChild(deleteButton);
 
@@ -345,22 +364,6 @@
             const searchQuery = this.value;
             loadAdminData(searchQuery);
         });
-
-        // Load the admin data only if the user is authenticated
-        document.addEventListener('DOMContentLoaded', function () {
-            firebase.auth().onAuthStateChanged(function (user) {
-                if (user) {
-                    // User is signed in, proceed to load the admin data
-                    loadAdminData();
-                } else {
-                    // User is not signed in, redirect to login page
-                    window.location.href = 'login.html';
-                }
-            });
-        });
-
-
-
 
         // Load the admin data only if the user is authenticated
         document.addEventListener('DOMContentLoaded', function () {
@@ -401,83 +404,83 @@
         });
     </script>
 
-    <script>
-        const INACTIVITY_LIMIT = 1800000; // 30 minutes in milliseconds
+<script>
+    const INACTIVITY_LIMIT = 1800000; // 30 minutes in milliseconds
 
-        // Firebase Authentication to check if a user is logged in
-        firebase.auth().onAuthStateChanged(function (user) {
-            if (user) {
-                // User is logged in
-                document.getElementById('displayUserName').textContent = user.email;
-                clearInactivityTimestamp(); // Clear inactivity timestamp on login
-                startInactivityTimer(); // Start the inactivity timer
-            } else {
-                // Redirect to login if not logged in
-                window.location.href = 'login.html';
-            }
+    // Firebase Authentication to check if a user is logged in
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is logged in
+            document.getElementById('displayUserName').textContent = user.email;
+            clearInactivityTimestamp(); // Clear inactivity timestamp on login
+            startInactivityTimer(); // Start the inactivity timer
+        } else {
+            // Redirect to login if not logged in
+            window.location.href = 'login.html';
+        }
+    });
+
+    // Logout function
+    function logoutUser() {
+        firebase.auth().signOut().then(() => {
+            clearInactivityTimestamp(); // Clear timestamp on logout
+            window.location.href = 'login.html';
+        }).catch((error) => {
+            console.error('Error logging out: ', error);
         });
+    }
 
-        // Logout function
-        function logoutUser() {
-            firebase.auth().signOut().then(() => {
-                clearInactivityTimestamp(); // Clear timestamp on logout
-                window.location.href = 'login.html';
-            }).catch((error) => {
-                console.error('Error logging out: ', error);
-            });
-        }
+    // Clear last activity timestamp
+    function clearInactivityTimestamp() {
+        localStorage.removeItem('lastActivity');
+    }
 
-        // Clear last activity timestamp
-        function clearInactivityTimestamp() {
-            localStorage.removeItem('lastActivity');
-        }
+    // Update last activity timestamp
+    function updateLastActivityTimestamp() {
+        localStorage.setItem('lastActivity', Date.now());
+    }
 
-        // Update last activity timestamp
-        function updateLastActivityTimestamp() {
-            localStorage.setItem('lastActivity', Date.now());
-        }
-
-        // Check if the user has been inactive for more than 30 minutes
-        function checkInactivity() {
-            const lastActivity = localStorage.getItem('lastActivity');
-            if (lastActivity) {
-                const timeSinceLastActivity = Date.now() - lastActivity;
-                if (timeSinceLastActivity > INACTIVITY_LIMIT) {
-                    logoutUserDueToInactivity();
-                }
+    // Check if the user has been inactive for more than 30 minutes
+    function checkInactivity() {
+        const lastActivity = localStorage.getItem('lastActivity');
+        if (lastActivity) {
+            const timeSinceLastActivity = Date.now() - lastActivity;
+            if (timeSinceLastActivity > INACTIVITY_LIMIT) {
+                logoutUserDueToInactivity();
             }
         }
+    }
 
-        // Auto logout after 30 minutes of inactivity
-        let inactivityTimeout;
+    // Auto logout after 30 minutes of inactivity
+    let inactivityTimeout;
 
-        function startInactivityTimer() {
-            resetInactivityTimer(); // Reset timer on page load
-            window.addEventListener('mousemove', resetInactivityTimer);
-            window.addEventListener('keypress', resetInactivityTimer);
-            window.addEventListener('click', resetInactivityTimer);
-        }
+    function startInactivityTimer() {
+        resetInactivityTimer(); // Reset timer on page load
+        window.addEventListener('mousemove', resetInactivityTimer);
+        window.addEventListener('keypress', resetInactivityTimer);
+        window.addEventListener('click', resetInactivityTimer);
+    }
 
-        function resetInactivityTimer() {
-            clearTimeout(inactivityTimeout); // Clear the existing timer
-            updateLastActivityTimestamp(); // Update the activity timestamp
-            inactivityTimeout = setTimeout(logoutUserDueToInactivity, INACTIVITY_LIMIT); // Set timer for 30 minutes
-        }
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimeout); // Clear the existing timer
+        updateLastActivityTimestamp(); // Update the activity timestamp
+        inactivityTimeout = setTimeout(logoutUserDueToInactivity, INACTIVITY_LIMIT); // Set timer for 30 minutes
+    }
 
-        function logoutUserDueToInactivity() {
-            clearInactivityTimestamp(); // Clear timestamp
-            firebase.auth().signOut().then(() => {
-                window.location.href = 'login.html'; // Redirect to login page
-            }).catch((error) => {
-                console.error('Error logging out: ', error);
-            });
-        }
-
-        // Check inactivity on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            checkInactivity(); // Check for inactivity on page load
+    function logoutUserDueToInactivity() {
+        clearInactivityTimestamp(); // Clear timestamp
+        firebase.auth().signOut().then(() => {
+            window.location.href = 'login.html'; // Redirect to login page
+        }).catch((error) => {
+            console.error('Error logging out: ', error);
         });
-    </script>
+    }
+
+    // Check inactivity on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        checkInactivity(); // Check for inactivity on page load
+    });
+</script>
 
 </body>
 

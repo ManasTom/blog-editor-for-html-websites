@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIMPLI</title>
     <link rel="stylesheet" href="blog.css">
+    <link rel="stylesheet" href="ql.css">
 
     <!-- bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -26,7 +27,7 @@
 
 <body>
     <section class="row bed_menubar">
-        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 bed_menubar_col1">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 bed_menubar_col1">
             <div class="bed_menubar_item">
                 <img src="globals/favicon.png" alt="">
             </div>
@@ -36,6 +37,8 @@
         </div>
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 bed_menubar_col2">
             <div class="bed_menubar_item">
+                <button onclick="window.open('https://tools.illforddigital.com/webp-converter.html', '_blank')">IMAGE
+                    COMPRESSOR <i class="fa-solid fa-arrow-up-right-from-square"></i></button>
                 <h6 id="displayUserName"></h6>
                 <h6>&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-user"></i></h6>
                 <button onclick="logoutUser()"> Logout&nbsp; <i class="fa-solid fa-right-from-bracket"></i></button>
@@ -48,20 +51,60 @@
                 <div class="row">
                     <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-12">
                         <section class="bed_editor_area">
+                            <label for="">Title :</label>
                             <input type="text" placeholder="Add Title" id="postTitle" name="title">
                             <!-- Create the editor container -->
                             <div class="bed_content_editor" id="bed_content_editor">
                                 <br> <br>
                             </div>
+                            <br>
                             <input type="hidden" id="content" name="content">
+                            <label for="">Focus Keyphrase :</label>
                             <input type="text" placeholder="Add the Focus Keyphrase" id="focusKeyphrase"
                                 name="focusKeyphrase">
+                            <label for="">SEO Title :</label>
                             <input type="text" placeholder="Add SEO Title" id="seoTitle" name="seoTitle">
+                            <label for="">Slug :</label>
                             <input type="text" placeholder="Add Slug" id="slug" name="slug">
+                            <label for="">Meta Description :</label>
                             <input type="text" placeholder="Add Meta Description" id="metaDescription"
                                 name="metaDescription">
+                            <label for="">Canonical URL :</label>
+                            <input readonly type="text" placeholder="Add Canonical URL" id="canonicalUrl"
+                                name="canonicalUrl">
                             <input type="hidden" id="tags" name="tags">
                             <input type="hidden" id="isEditing" name="isEditing" value="">
+                            <br>
+                            <br>
+                            <h6>Advanced options <a onclick="showAdvancedOptions()"><i
+                                        class="fa-solid fa-chevron-down"></i></a></h6>
+                            <br>
+
+                            <div class="advanced_editor_options">
+                                <label for="">Meta tags in head tag :</label>
+                                <br>
+                                <textarea rows="5" name="headSrcipts" id="headSrcipts"
+                                    placeholder="Paste the meta tag snippets to be placed inside the <head> tag"></textarea>
+                                <br>
+
+                                <label for="">Structured data scripts :</label>
+                                <br>
+                                <textarea rows="5" name="structuredData" id="structuredData"
+                                    placeholder="Paste the structured data code snippets to be placed inside the <head> tag"></textarea>
+
+                                <label for="">Other scripts :</label>
+                                <br>
+                                <textarea rows="5" name="otherHeadScripts" id="otherHeadScripts"
+                                    placeholder="Paste other code snippets like g-tag manager, tracking codes etc, to be placed inside the <head> tag"></textarea>
+
+                                <label for="">Scripts in body tag :</label>
+                                <br>
+                                <textarea rows="5" name="bodySrcipts" id="bodySrcipts"
+                                    placeholder="Paste the code snippets to be placed inside the <body> tag"></textarea>
+                                <br>
+                            </div>
+
+
                         </section>
                     </div>
 
@@ -79,6 +122,10 @@
                             <button type="button" id="remove-button">Remove featured image</button>
                         </div>
 
+                        <!-- Add this near the publish button or wherever appropriate -->
+                        <label for="timestampInput">Set Publish Date (optional):</label>
+                        <input type="datetime-local" id="timestampInput" name="timestamp">
+
                         <div class="tags-card">
                             <p>Tags</p>
                             <div class="input-group">
@@ -90,11 +137,57 @@
 
                         <div class="categories_card">
                             <p>Category</p>
-                            <input type="radio" name="category" id="blog" value="blog"><label for="blog">&nbsp;
-                                Blog</label>
-                            <br>
-                            <input type="radio" name="category" id="caseStudy" value="case study"><label
-                                for="caseStudy">&nbsp; Case Study</label>
+                            <div class="input-group">
+                                <select id="category-dropdown" name="category" class="form-control">
+                                    <!-- Options will be dynamically populated from categories.json -->
+                                </select>
+                                <!-- <button type="button" id="add-category-button">Add New</button> -->
+                            </div>
+
+                            <!-- Modal to Add New Category -->
+                            <div id="addCategoryModal" style="display:none;">
+                                <label for="newCategoryInput">Enter New Category:</label>
+                                <input type="text" id="newCategoryInput" />
+                                <button type="button" id="saveCategoryButton">Save Category</button>
+                            </div>
+                        </div>
+
+                        <div class="robots_card">
+                            <!-- Robots Meta Dropdown -->
+                            <div class="robots-meta-card">
+                                <p>Robots Meta</p>
+                                <select id="robotsMeta" name="robotsMeta">
+                                    <option value="index, follow">index, follow</option>
+                                    <option value="index, nofollow">index, nofollow</option>
+                                    <option value="noindex, follow">noindex, follow</option>
+                                    <option value="noindex, nofollow">noindex, nofollow</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="geoTag_card">
+
+                            <!-- Hidden input for robotsMeta to ensure it's submitted -->
+                            <input type="hidden" id="robotsMetaInput" name="robotsMetaInput">
+
+                            <!-- Location input fields -->
+                            <div class="location-card">
+                                <p>Location</p>
+                                <input type="text" id="geoRegionInput" placeholder="Region Code (e.g., AE)" />
+                                <input type="text" id="geoPlacenameInput" placeholder="Placename (e.g., Atmar)" />
+                                <input type="text" id="geoLatInput" placeholder="Enter Latitude" />
+                                <input type="text" id="geoLonInput" placeholder="Enter Longitude" />
+                            </div>
+
+                            <!-- Hidden inputs for geo tags -->
+                            <input type="hidden" id="geoRegion" name="geoRegion" value="">
+                            <input type="hidden" id="geoPlacename" name="geoPlacename" value="">
+                            <input type="hidden" id="geoPosition" name="geoPosition" value="">
+                            <input type="hidden" id="ICBM" name="ICBM" value="">
+
+
                         </div>
 
                         <div class="actions_card">
@@ -111,11 +204,54 @@
                             <br><br>
                             <button type="button" id="publish">Publish</button>
                         </div>
+
+                        <!-- Modal for alt and title text -->
+                        <div id="altTitleModal" style="display:none;">
+                            <label for="altTextInput">Enter Alt Text:</label>
+                            <input type="text" id="altTextInput" />
+
+                            <label for="titleTextInput">Enter Title Text:</label>
+                            <input type="text" id="titleTextInput" />
+
+                            <button type="button" id="saveAltTitleButton">Save</button>
+                        </div>
+
+
                     </div>
                 </div>
             </form>
         </div>
     </div>
+
+    <style>
+        #altTextModal {
+            position: fixed;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+        }
+
+        #altTitleModal {
+            position: fixed;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+        }
+    </style>
+
+    <script>
+        // When the page loads, populate the hidden input field with the current image src
+        window.onload = function () {
+            var featuredImage = document.getElementById('featured-image');
+            if (featuredImage) {
+                document.getElementById('featured-image-url').value = featuredImage.src;
+            }
+        };
+    </script>
 
     <!-- bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -129,7 +265,6 @@
         crossorigin="anonymous"></script>
     <!-- Include the Quill library -->
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
-    <script src="blog.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
@@ -137,15 +272,22 @@
     <!-- Import Firebase Authentication -->
     <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
     <script src="fireconfig.js"></script> <!-- Your Firebase config file -->
+
+
     <script>
-        // When the page loads, populate the hidden input field with the current image src
-        window.onload = function () {
-            var featuredImage = document.getElementById('featured-image');
-            if (featuredImage) {
-                document.getElementById('featured-image-url').value = featuredImage.src;
+        function showAdvancedOptions() {
+            // Get the element with class advanced_editor_options
+            var advancedOptions = document.querySelector('.advanced_editor_options');
+
+            // Toggle the display property between 'none' and 'block'
+            if (advancedOptions.style.display === 'none' || advancedOptions.style.display === '') {
+                advancedOptions.style.display = 'block';
+            } else {
+                advancedOptions.style.display = 'none';
             }
-        };
+        }
     </script>
+
     <script>
 
         // Firebase Authentication to check if a user is logged in
@@ -172,59 +314,129 @@
     </script>
 
     <script>
+        // Function to calculate the size of a string in bytes
+        function calculateSizeInBytes(content) {
+            // Convert content to a Blob to calculate its size in bytes
+            const blob = new Blob([content], { type: 'text/plain' });
+            return blob.size;
+        }
+
+        // Set the content limit in bytes (4 MB = 4,194,304 bytes)
+        const MAX_SIZE = 4194304; // 4 MB
+
         document.getElementById('publish').addEventListener('click', function () {
-            var featuredImage = document.getElementById('featured-image');
-            if (featuredImage) {
-                document.getElementById('featured-image-url').value = featuredImage.src;
-            }
-            // Get the content from the editor
-            document.getElementById('content').value = quill.root.innerHTML;
+            // Get the content from the Quill editor
+            const quillContent = quill.root.innerHTML;
 
-            // Collect tags
-            const tagsContainer = document.getElementById('tags-container');
-            const tags = Array.from(tagsContainer.children).map(tagElement => {
-                // Ensure only one `#` is present
-                let tag = tagElement.firstChild.textContent;
-                tag = tag.replace(/^#+/, ''); // Remove all leading #
-                tag = '#' + tag.trim(); // Add a single #
-                return tag;
-            });
-            document.getElementById('tags').value = tags.join(',');
+            // Calculate the size of the content
+            const contentSize = calculateSizeInBytes(quillContent);
 
-            // Check if the post is new or being edited
-            const isEditing = localStorage.getItem('editPostData') !== null;
-
-            if (!isEditing) {  // Slug check only for new posts
-                // If creating a new post, check if a file with the same slug already exists
-                const slug = document.getElementById('slug').value.trim();
-                if (slug) {
-                    fetch('check_slug.php?slug=' + encodeURIComponent(slug))
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.exists) {
-                                alert('A file with this slug name already exists. Please choose a different slug.');
-                            } else {
-                                // Proceed with publishing if no file with the same slug exists
-                                document.getElementById('blogForm').submit();
-                            }
-                        })
-                        .catch(error => console.error('Error checking slug:', error));
-                } else {
-                    alert('Slug cannot be empty.');
-                }
+            if (contentSize > MAX_SIZE) {
+                // If content exceeds the limit, show an error message
+                alert('The content size exceeds the 4 MB limit. Please reduce the content size.');
             } else {
-                // For existing posts (editing), skip the slug check and submit the form directly
-                document.getElementById('blogForm').submit();
-                localStorage.removeItem('editPostData');
+                // Proceed with the form submission
+
+                document.getElementById('publish').addEventListener('click', function () {
+                    var featuredImage = document.getElementById('featured-image');
+                    if (featuredImage) {
+                        document.getElementById('featured-image-url').value = featuredImage.src;
+                    }
+                    // Get the content from the editor
+                    document.getElementById('content').value = quill.root.innerHTML;
+
+                    // Get the selected robots meta value
+                    const robotsMeta = document.getElementById('robotsMeta').value;
+
+                    // Set the hidden input value to the selected robots meta value
+                    document.getElementById('robotsMetaInput').value = robotsMeta;
+
+                    // Submit the form
+                    document.getElementById('blogForm').submit();
+
+                    // Collect tags
+                    const tagsContainer = document.getElementById('tags-container');
+                    const tags = Array.from(tagsContainer.children).map(tagElement => {
+                        // Ensure only one `#` is present
+                        let tag = tagElement.firstChild.textContent;
+                        tag = tag.replace(/^#+/, ''); // Remove all leading #
+                        tag = tag.trim(); // Add a single #
+                        return tag;
+                    });
+                    document.getElementById('tags').value = tags.join(',');
+
+
+                    // Get geo-location values and fill in hidden inputs
+                    var region = document.getElementById('geoRegionInput').value.trim();
+                    var placename = document.getElementById('geoPlacenameInput').value.trim();
+                    var lat = document.getElementById('geoLatInput').value.trim();
+                    var lon = document.getElementById('geoLonInput').value.trim();
+
+                    // if (!region || !placename || !lat || !lon) {
+                    //     alert('Please fill in all the location fields.');
+                    //     return;
+                    // }
+
+                    document.getElementById('geoRegion').value = region;
+                    document.getElementById('geoPlacename').value = placename;
+                    document.getElementById('geoPosition').value = lat + ';' + lon;
+                    document.getElementById('ICBM').value = lat + ', ' + lon;
+
+
+                    // Check if the post is new or being edited
+                    const isEditing = localStorage.getItem('editPostData') !== null;
+
+                    if (!isEditing) {  // Slug check only for new posts
+                        // If creating a new post, check if a file with the same slug already exists
+                        const slug = document.getElementById('slug').value.trim();
+                        if (slug) {
+                            fetch('check_slug.php?slug=' + encodeURIComponent(slug))
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.exists) {
+                                        alert('A file with this slug name already exists. Please choose a different slug.');
+                                    } else {
+                                        // Proceed with publishing if no file with the same slug exists
+                                        document.getElementById('blogForm').submit();
+                                    }
+                                })
+                                .catch(error => console.error('Error checking slug:', error));
+                        } else {
+                            alert('Slug cannot be empty.');
+                        }
+                    } else {
+                        // For existing posts (editing), skip the slug check and submit the form directly
+                        document.getElementById('blogForm').submit();
+                        localStorage.removeItem('editPostData');
+                    }
+                });
+
+
+                // When the publish button is clicked, make sure the selected robots meta is saved
+                document.getElementById('publish').addEventListener('click', function () {
+                    const robotsMeta = document.getElementById('robotsMeta').value;
+                    document.getElementById('robotsMetaInput').value = robotsMeta;
+
+                    // Proceed with the rest of the form submission logic
+                    document.getElementById('blogForm').submit();
+                });
             }
         });
+    </script>
 
+    <script>
         // Load the post data for editing
         document.addEventListener('DOMContentLoaded', function () {
             const editPostData = localStorage.getItem('editPostData');
 
             if (editPostData) {
                 const postData = JSON.parse(editPostData);
+
+
+                // Populate the canonical URL field
+                if (postData.canonicalUrl) {
+                    document.getElementById('canonicalUrl').value = postData.canonicalUrl;
+                }
 
                 // Populate the form fields with the post data
                 document.getElementById('postTitle').addEventListener('input', function () {
@@ -237,6 +449,7 @@
 
                     document.getElementById('slug').value = slug;
                 });
+
                 quill.root.innerHTML = postData.content; // Populate the Quill editor
                 document.getElementById('focusKeyphrase').value = postData.focusKeyphrase;
                 document.getElementById('seoTitle').value = postData.seoTitle;
@@ -244,6 +457,11 @@
                 document.getElementById('metaDescription').value = postData.metaDescription;
                 document.getElementById('tags').value = postData.tags;
                 document.getElementById('postTitle').value = postData.title;
+                document.getElementById('headSrcipts').value = postData.headScripts || ''; // Load head scripts
+                document.getElementById('bodySrcipts').value = postData.bodyScripts || ''; // Load body scripts
+                document.getElementById('otherHeadScripts').value = postData.otherHeadScripts || ''; // Load body scripts
+                document.getElementById('structuredData').value = postData.structuredData || ''; // Load structured Data
+
 
                 // Populate the featured image
                 document.getElementById('featured-image').src = postData.featuredImage;
@@ -267,12 +485,53 @@
                 });
 
                 // Populate category
-                const categoryOptions = document.getElementsByName('category');
-                categoryOptions.forEach(option => {
-                    if (option.value.toLowerCase() === postData.category.toLowerCase()) {
-                        option.checked = true;
-                    }
-                });
+
+                // if (postData.category) {
+                //     document.getElementById('category-dropdown').value = postData.category;
+                // }
+
+                // const categoryOptions = document.getElementsByName('category');
+                // categoryOptions.forEach(option => {
+                //     if (option.value.toLowerCase() === postData.category.toLowerCase()) {
+                //         option.checked = true;
+                //     }
+                // });
+
+
+                // Prepopulate robots meta dropdown based on saved value
+                if (postData.robotsMeta) {
+                    document.getElementById('robotsMeta').value = postData.robotsMeta;
+                }
+
+                // Populate geo tags if they exist in postData
+                if (postData.geoRegion) {
+                    document.getElementById('geoRegionInput').value = postData.geoRegion;
+                } else {
+                    document.getElementById('geoRegionInput').value = '';
+                }
+
+                if (postData.geoPlacename) {
+                    document.getElementById('geoPlacenameInput').value = postData.geoPlacename;
+                } else {
+                    document.getElementById('geoPlacenameInput').value = '';
+                }
+
+                if (postData.geoPosition) {
+                    const [lat, lon] = postData.geoPosition.split(';');
+                    document.getElementById('geoLatInput').value = lat || '';
+                    document.getElementById('geoLonInput').value = lon || '';
+                } else {
+                    document.getElementById('geoLatInput').value = '';
+                    document.getElementById('geoLonInput').value = '';
+                }
+
+                if (postData.ICBM) {
+                    const [lat, lon] = postData.ICBM.split(', ');
+                    document.getElementById('geoLatInput').value = lat || '';
+                    document.getElementById('geoLonInput').value = lon || '';
+                }
+
+
 
                 // Populate visibility
                 const visibilityOptions = document.getElementsByName('visibility');
@@ -303,8 +562,8 @@
                     .catch(error => console.error('Error:', error));
             }
         });
-
     </script>
+
     <script>
         document.getElementById('postTitle').addEventListener('input', function () {
             let title = this.value;
@@ -315,15 +574,150 @@
                 .replace(/-+/g, '-'); // Replace multiple hyphens with single hyphen
 
             document.getElementById('slug').value = slug;
+
+            // Auto-generate the canonical URL
+            let canonicalUrl = 'https://demo.illforddigital.com/blog/' + slug;
+
+            // Set the canonical URL value
+            document.getElementById('canonicalUrl').value = canonicalUrl;
         });
 
         document.addEventListener('keydown', function (event) {
-            if (event.key === 'Enter') {  // Check if the Enter key is pressed
-                document.getElementById('add-tag-button').click();  // Trigger the button click
-                event.preventDefault();
+            const activeElement = document.activeElement; // Get the currently focused element
+            if (activeElement.id === 'tag-input' && event.key === 'Enter') {
+                document.getElementById('add-tag-button').click();  // Trigger the button click to add tags
+                event.preventDefault();  // Prevent default action
             }
         });
     </script>
+
+    <script src="blog.js"></script>
+
+    <script>
+        const ImageBlot = Quill.import('formats/image');
+
+        class CustomImageBlot extends ImageBlot {
+            static create(value) {
+                let node = super.create(value.url || value);
+                node.setAttribute('src', value.url || value);
+
+                // Set alt text if provided
+                if (value.alt) {
+                    node.setAttribute('alt', value.alt);
+                }
+
+                // Set title if provided
+                if (value.title) {
+                    node.setAttribute('title', value.title);
+                }
+
+                return node;
+            }
+
+            static value(domNode) {
+                return {
+                    url: domNode.getAttribute('src'),
+                    alt: domNode.getAttribute('alt'),
+                    title: domNode.getAttribute('title') || '', // Get title attribute
+                };
+            }
+
+            static formats(domNode) {
+                let formats = super.formats(domNode);
+                formats.alt = domNode.getAttribute('alt') || '';
+                formats.title = domNode.getAttribute('title') || '';
+                return formats;
+            }
+
+            format(name, value) {
+                if (name === 'alt') {
+                    if (value) {
+                        this.domNode.setAttribute('alt', value);
+                    } else {
+                        this.domNode.removeAttribute('alt');
+                    }
+                } else if (name === 'title') {
+                    if (value) {
+                        this.domNode.setAttribute('title', value);
+                    } else {
+                        this.domNode.removeAttribute('title');
+                    }
+                } else {
+                    super.format(name, value);
+                }
+            }
+        }
+
+        Quill.register(CustomImageBlot, true);
+
+    </script>
+
+    <script>
+        // When an image in the editor is clicked, show the modal to add alt and title text
+        document.querySelector('.ql-editor').addEventListener('click', function (e) {
+            if (e.target.tagName === 'IMG') {
+                const img = e.target;
+                const altTitleModal = document.getElementById('altTitleModal');
+                const altTextInput = document.getElementById('altTextInput');
+                const titleTextInput = document.getElementById('titleTextInput');
+                const saveAltTitleButton = document.getElementById('saveAltTitleButton');
+
+                // Pre-fill the inputs with the current alt and title text
+                altTextInput.value = img.getAttribute('alt') || '';
+                titleTextInput.value = img.getAttribute('title') || '';
+
+                // Show the modal near the image
+                altTitleModal.style.display = 'block';
+                altTitleModal.style.top = e.clientY + 'px';
+                altTitleModal.style.left = e.clientX + 'px';
+
+                // Save the alt and title text when the "Save" button is clicked
+                saveAltTitleButton.onclick = function (e) {
+                    e.preventDefault();  // Prevent any default form submission or page reload
+
+                    const altText = altTextInput.value;
+                    const titleText = titleTextInput.value;
+
+                    // Update the image alt and title attributes
+                    img.setAttribute('alt', altText);
+                    img.setAttribute('title', titleText);
+
+                    // Hide the modal
+                    altTitleModal.style.display = 'none';
+                };
+            }
+        });
+
+        // Hide the modal if clicked outside
+        document.addEventListener('click', function (e) {
+            const altTitleModal = document.getElementById('altTitleModal');
+            if (!altTitleModal.contains(e.target) && !e.target.closest('.ql-editor img')) {
+                altTitleModal.style.display = 'none';
+            }
+        });
+
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editPostData = localStorage.getItem('editPostData');
+            if (editPostData) {
+                const postData = JSON.parse(editPostData);
+
+                // Populate the timestamp field if editing
+                if (postData.timestamp) {
+                    const postDate = new Date(postData.timestamp);
+                    document.getElementById('timestampInput').value = postDate.toISOString().slice(0, 16);
+                }
+            } else {
+                // If creating a new post, default to the current date and time
+                const now = new Date().toISOString().slice(0, 16);
+                document.getElementById('timestampInput').value = now;
+            }
+        });
+    </script>
+
 </body>
 
 </html>

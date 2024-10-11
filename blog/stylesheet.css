@@ -80,8 +80,7 @@ body {
     height: max-content;
     padding: 3%;
     border-radius: 0.4rem;
-    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.637);
-
+    box-shadow: 0 0 20px 1px rgb(0 0 0 / 28%);
 }
 
 .recentpost_card img {
@@ -104,8 +103,6 @@ body {
         padding: 0px !important;
     }
 }
-
-
 
 
 
@@ -370,6 +367,10 @@ body {
     box-shadow: 0 0 10px rgb(0 0 0 / 71%);
     border-radius: 0.3rem;
     padding: 2%;
+}
+
+.recentpost_card {
+    margin-bottom: 20px;
 }
 
 * {

@@ -1,0 +1,82 @@
+
+
+.ql-align-center{
+    text-align: center;
+}
+
+.ql-align-right{
+    text-align: right;
+}
+
+.ql-align-justify{
+    text-align: justify;
+}
+
+
+.ql-font-serif{
+    font-family: "Source Serif 4", serif;
+}
+
+.ql-font-monospace{
+    font-family: "Space Mono", monospace;
+}
+
+.ql-indent-1{
+    padding-left: 5%;
+}
+.ql-indent-2{
+    padding-left: 10%;
+}
+.ql-indent-3{
+    padding-left: 15%;
+}
+.ql-indent-4{
+    padding-left: 20%;
+}
+.ql-indent-5{
+    padding-left: 25%;
+}
+.ql-indent-6{
+    padding-left: 30%;
+}
+.ql-indent-7{
+    padding-left: 35%;
+    font-variant-numeric:lining-nums;
+}
+
+/* Default list item marker */
+li[data-list="ordered"]::marker {
+    unicode-bidi: isolate;
+    font-variant-numeric: tabular-nums;
+    text-transform: none;
+    text-indent: 0px !important;
+    text-align: start !important;
+    text-align-last: start !important;
+    list-style-type: decimal; /* Shows numbers */
+}
+
+/* Bullet list marker as dots */
+li[data-list="bullet"]::marker {
+    content: '•'; /* Use bullet character */
+    font-size: 1.2em; /* Adjust the size if necessary */
+    color: black; /* Set bullet color */
+}
+
+/* Checked list marker as tick/check mark */
+li[data-list="checked"]::marker {
+    content: '✔'; /* Use check mark symbol */
+    font-size: 0.8em;
+    color: rgb(0, 0, 0); /* Set the color for check marks */
+}
+
+/* Unchecked list marker as an empty box */
+li[data-list="unchecked"]::marker {
+    content: '⬜'; /* Use empty box symbol */
+    font-size: 0.8em;
+    color: black; /* Set the color for empty boxes */
+}
+
+.ql-video{
+    width: 100%;
+    height: 80vh;
+}
